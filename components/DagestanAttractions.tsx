@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 
 const attractionsData = [
@@ -49,7 +49,7 @@ const attractionsData = [
   }
 ];
 
-const cardVariants = {
+const cardVariants: Variants = {
   enter: (direction: number) => ({
     x: direction > 0 ? "100%" : "-100%",
     opacity: 0,
@@ -62,7 +62,7 @@ const cardVariants = {
     scale: 1,
     zIndex: 1,
     transition: {
-      x: { type: "spring", stiffness: 200, damping: 25 },
+      x: { type: "spring" as const, stiffness: 200, damping: 25 },
       opacity: { duration: 0.4, ease: "easeOut" as const },
       scale: { duration: 0.4, ease: "easeOut" as const },
     },
@@ -73,7 +73,7 @@ const cardVariants = {
     scale: 0.9,
     zIndex: 0,
     transition: {
-      x: { type: "spring", stiffness: 200, damping: 25 },
+      x: { type: "spring" as const, stiffness: 200, damping: 25 },
       opacity: { duration: 0.3, ease: "easeIn" as const },
       scale: { duration: 0.3, ease: "easeIn" as const },
     },
