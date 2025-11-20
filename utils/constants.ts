@@ -4,6 +4,14 @@ const getApiBaseUrl = (): string => {
   if (process.env.NEXT_PUBLIC_API_BASE_URL) {
     return process.env.NEXT_PUBLIC_API_BASE_URL;
   }
+
+  // В dev режиме можно указать альтернативный сервер
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    process.env.NEXT_PUBLIC_DEV_API_URL
+  ) {
+    return process.env.NEXT_PUBLIC_DEV_API_URL;
+  }
   
   // Автоматическое определение на основе NODE_ENV
   if (process.env.NODE_ENV === 'production') {

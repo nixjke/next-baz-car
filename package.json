@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:remote": "cross-env NEXT_PUBLIC_DEV_API_URL=http://91.229.11.172:8080/api/v1 next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
@@ -40,6 +41,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^7.0.3",
     "autoprefixer": "^10.4.16",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
