@@ -102,7 +102,7 @@ export default function CarsPage() {
 	]
 
 	const filteredCars = cars.filter((car) => {
-		const description = car.description_ru || car.description || ''
+		const description = car.description || ''
 		const matchesSearch =
 			car.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			(description && description.toLowerCase().includes(searchTerm.toLowerCase()))

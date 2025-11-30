@@ -38,7 +38,6 @@ type Car = {
 	id: number
 	name: string
 	description?: string
-	description_ru?: string
 	price: number
 	price_3plus_days?: number
 	rating?: number
@@ -46,11 +45,8 @@ type Car = {
 	fuelType?: string
 	images?: string[]
 	specifications?: {
-		seating_ru?: string
 		seating?: string
-		power_ru?: string
 		power?: string
-		engine_ru?: string
 		engine?: string
 	}
 	[key: string]: any
@@ -140,9 +136,9 @@ const CarCardHeaderContent = ({ car }: { car: Car }) => (
 const CarCardSpecs = ({ car }: { car: Car }) => {
     // Безопасная обработка данных
     const specs = car?.specifications || {};
-    const seating = specs.seating_ru || specs.seating || "5";
-    const power = specs.power_ru || specs.power || "200";
-    const engine = specs.engine_ru || specs.engine || "ДВС";
+    const seating = specs.seating || "5";
+    const power = specs.power || "200";
+    const engine = specs.engine || "ДВС";
 
     return (
       <div className="grid grid-cols-3 gap-x-2 sm:gap-x-3 gap-y-2 text-xs text-muted-foreground mb-3 sm:mb-4">
@@ -164,7 +160,7 @@ const CarCardSpecs = ({ car }: { car: Car }) => {
 const CarCardMainContent = ({ car }: { car: Car }) => (
   <CardContent className="p-4 sm:p-5 pt-0 flex-grow">
     <p className="text-muted-foreground text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 leading-relaxed">
-      {car.description_ru || car.description || 'Комфортный автомобиль для аренды'}
+      {car.description || 'Комфортный автомобиль для аренды'}
     </p>
     <CarCardSpecs car={car} />
   </CardContent>

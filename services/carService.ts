@@ -39,27 +39,21 @@ const transformCar = (apiCar: any): Car => {
 		
 		// Маппинг полей из формата бэкенда в формат фронтенда
 		// Бэкенд использует: engine, seats, max_speed, acceleration_0_100, trunk_volume, power, range
-		// Фронтенд ожидает: engine_ru, seating_ru, topSpeed_ru, acceleration_ru, cargo_ru, power_ru, range_ru
-		if (specifications.engine) {
-			normalizedSpecs.engine_ru = specifications.engine
-		}
+		// Фронтенд ожидает: engine, seating, topSpeed, acceleration, cargo, power, range
 		if (specifications.seats) {
-			normalizedSpecs.seating_ru = `${specifications.seats} мест`
+			normalizedSpecs.seating = `${specifications.seats} мест`
 		}
 		if (specifications.max_speed) {
-			normalizedSpecs.topSpeed_ru = `${specifications.max_speed} км/ч`
+			normalizedSpecs.topSpeed = `${specifications.max_speed} км/ч`
 		}
 		if (specifications.acceleration_0_100) {
-			normalizedSpecs.acceleration_ru = `${specifications.acceleration_0_100} сек`
+			normalizedSpecs.acceleration = `${specifications.acceleration_0_100} сек`
 		}
 		if (specifications.range) {
-			normalizedSpecs.range_ru = `${specifications.range} км`
+			normalizedSpecs.range = `${specifications.range} км`
 		}
 		if (specifications.trunk_volume) {
-			normalizedSpecs.cargo_ru = `${specifications.trunk_volume} л`
-		}
-		if (specifications.power) {
-			normalizedSpecs.power_ru = `${specifications.power} л.с.`
+			normalizedSpecs.cargo = `${specifications.trunk_volume} л`
 		}
 		
 		specifications = normalizedSpecs
@@ -72,15 +66,11 @@ const transformCar = (apiCar: any): Car => {
 		id: apiCar.id,
 		name: apiCar.name,
 		category: apiCar.category,
-		category_ru: apiCar.category_ru,
 		price: apiCar.price || 0,
 		price_3plus_days: apiCar.price_3plus_days,
 		images: apiCar.images?.map((img: string) => getImageUrl(img)) || [],
-		// Используем обычные поля, так как бэкенд уже возвращает русский текст
 		description: apiCar.description,
-		description_ru: apiCar.description || apiCar.description_ru, // Fallback для совместимости
 		features: apiCar.features,
-		features_ru: apiCar.features || apiCar.features_ru, // Fallback для совместимости
 		specifications: specifications,
 		available: apiCar.available,
 		rating: apiCar.rating,

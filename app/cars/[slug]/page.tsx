@@ -223,24 +223,24 @@ export default function CarDetailPage() {
 							{car.specifications && (
 								<div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
 									{[
-										car.specifications.engine_ru && {
+										car.specifications.engine && {
 											icon: CarIcon,
-											label: car.specifications.engine_ru.split(' ')[0],
+											label: car.specifications.engine.split(' ')[0],
 											sub: 'Двигатель',
 										},
-										car.specifications.seating_ru && {
+										car.specifications.seating && {
 											icon: Users,
-											label: car.specifications.seating_ru.split(' ')[0],
+											label: car.specifications.seating.split(' ')[0],
 											sub: 'Мест',
 										},
-										car.specifications.topSpeed_ru && {
+										car.specifications.topSpeed && {
 											icon: Gauge,
-											label: car.specifications.topSpeed_ru.split(' ')[0],
+											label: car.specifications.topSpeed.split(' ')[0],
 											sub: 'Макс. скорость',
 										},
-										car.specifications.acceleration_ru && {
+										car.specifications.acceleration && {
 											icon: Zap,
-											label: car.specifications.acceleration_ru.split(' ')[0],
+											label: car.specifications.acceleration.split(' ')[0],
 											sub: '0-100км/ч',
 										},
 									].filter(Boolean).map((item, idx) => (
@@ -281,45 +281,45 @@ export default function CarDetailPage() {
 								<h2 className="text-3xl font-bold text-foreground mb-5">Характеристики</h2>
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
 									{[
-										car.specifications.engine_ru && {
+										car.specifications.engine && {
 											icon: CarIcon,
 											label: 'Двигатель',
-											value: car.specifications.engine_ru,
+											value: car.specifications.engine,
 										},
-										car.specifications.power_ru && {
+										car.specifications.power && {
 											icon: Zap,
 											label: 'Мощность',
-											value: car.specifications.power_ru,
+											value: car.specifications.power,
 										},
-										car.specifications.acceleration_ru && {
+										car.specifications.acceleration && {
 											icon: Gauge,
 											label: 'Разгон',
-											value: car.specifications.acceleration_ru,
+											value: car.specifications.acceleration,
 										},
-										car.specifications.topSpeed_ru && {
+										car.specifications.topSpeed && {
 											icon: Gauge,
 											label: 'Макс. скорость',
-											value: car.specifications.topSpeed_ru,
+											value: car.specifications.topSpeed,
 										},
-										car.specifications.seating_ru && {
+										car.specifications.seating && {
 											icon: Users,
 											label: 'Количество мест',
-											value: car.specifications.seating_ru,
+											value: car.specifications.seating,
 										},
-										car.specifications.cargo_ru && {
+										car.specifications.cargo && {
 											icon: Package,
 											label: 'Объем багажника',
-											value: car.specifications.cargo_ru,
+											value: car.specifications.cargo,
 										},
-										car.specifications.fuelEconomy_ru && {
+										car.specifications.fuelEconomy && {
 											icon: Fuel,
 											label: 'Расход топлива',
-											value: car.specifications.fuelEconomy_ru,
+											value: car.specifications.fuelEconomy,
 										},
-										car.specifications.range_ru && {
+										car.specifications.range && {
 											icon: CalendarDays,
 											label: 'Запас хода',
-											value: car.specifications.range_ru,
+											value: car.specifications.range,
 										},
 									].filter(Boolean).map((spec, index) => (
 										<div key={index} className="spec-item flex items-center">

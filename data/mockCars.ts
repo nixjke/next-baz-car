@@ -2,31 +2,20 @@ export type Car = {
 	id: number
 	name: string
 	category?: string
-	category_ru?: string
 	price: number
 	price_3plus_days?: number
 	images?: string[]
 	description?: string
-	description_ru?: string
 	features?: string[]
-	features_ru?: string[]
 	specifications?: {
 		engine?: string
-		engine_ru?: string
 		power?: string
-		power_ru?: string
 		acceleration?: string
-		acceleration_ru?: string
 		topSpeed?: string
-		topSpeed_ru?: string
 		range?: string
-		range_ru?: string
 		seating?: string
-		seating_ru?: string
 		cargo?: string
-		cargo_ru?: string
 		fuelEconomy?: string
-		fuelEconomy_ru?: string
 	}
 	available?: boolean
 	rating?: number
@@ -46,7 +35,6 @@ export const mockCars: Car[] = [
 		id: 1,
 		name: 'LiXiang L6 Pro (Cлоновья кость)',
 		category: 'Premium Electric',
-		category_ru: 'Премиум',
 		price: 15900,
 		price_3plus_days: 14300,
 		images: [
@@ -58,8 +46,6 @@ export const mockCars: Car[] = [
 		],
 		description:
 			'Luxury electric sedan with premium comfort and advanced technology. Elegant ivory color.',
-		description_ru:
-			'Роскошный электрический седан с премиальным комфортом и передовыми технологиями. Элегантный цвет слоновая кость.',
 		features: [
 			'Long-range battery (700+ km)',
 			'Air suspension',
@@ -67,28 +53,14 @@ export const mockCars: Car[] = [
 			'Advanced driver assistance',
 			'Panoramic sunroof',
 		],
-		features_ru: [
-			'Большой запас хода (700+ км)',
-			'Пневмоподвеска',
-			'Салон из премиальной кожи',
-			'Продвинутые системы помощи водителю',
-			'Панорамная крыша',
-		],
 		specifications: {
 			engine: 'Dual Motor AWD',
-			engine_ru: 'Два мотора, полный привод',
 			power: '500 hp',
-			power_ru: '500 л.с.',
 			acceleration: '4.5 seconds (0-100 km/h)',
-			acceleration_ru: '4.5 секунды (0-100 км/ч)',
 			topSpeed: '250 km/h',
-			topSpeed_ru: '250 км/ч',
 			range: '710 km',
-			range_ru: '710 км',
 			seating: '5 adults',
-			seating_ru: '5 взрослых',
 			cargo: '450 liters',
-			cargo_ru: '450 литров',
 		},
 		available: true,
 		rating: 4.8,
@@ -99,7 +71,6 @@ export const mockCars: Car[] = [
 		id: 3,
 		name: 'LiXiang L7',
 		category: 'Luxury SUV',
-		category_ru: 'Люкс',
 		price: 17900,
 		price_3plus_days: 16110,
 		images: [
@@ -111,8 +82,6 @@ export const mockCars: Car[] = [
 		],
 		description:
 			'Flagship luxury electric SUV with spacious interior and cutting-edge technology in elegant black.',
-		description_ru:
-			'Флагманский люксовый электрический внедорожник с просторным салоном и передовыми технологиями в элегантном черном цвете.',
 		features: [
 			'Executive rear seating',
 			'Electrochromic roof',
@@ -120,28 +89,14 @@ export const mockCars: Car[] = [
 			'28-speaker audio system',
 			'Rear-wheel steering',
 		],
-		features_ru: [
-			'Бизнес-сиденья сзади',
-			'Электрохромная крыша',
-			'Сиденья с массажем',
-			'Аудиосистема на 28 динамиков',
-			'Задние управляемые колеса',
-		],
 		specifications: {
 			engine: 'Tri-Motor AWD',
-			engine_ru: 'Три мотора, полный привод',
 			power: '650 hp',
-			power_ru: '650 л.с.',
 			acceleration: '3.8 seconds (0-100 km/h)',
-			acceleration_ru: '3.8 секунды (0-100 км/ч)',
 			topSpeed: '270 km/h',
-			topSpeed_ru: '270 км/ч',
 			range: '750 km',
-			range_ru: '750 км',
 			seating: '5 adults',
-			seating_ru: '5 взрослых',
 			cargo: '550 liters',
-			cargo_ru: '550 литров',
 		},
 		available: true,
 		rating: 5.0,
@@ -152,7 +107,6 @@ export const mockCars: Car[] = [
 		id: 4,
 		name: 'Toyota Land Cruiser 200 (Черный)',
 		category: 'Luxury SUV',
-		category_ru: 'Люкс',
 		price: 12500,
 		price_3plus_days: 11250,
 		images: [
@@ -166,8 +120,6 @@ export const mockCars: Car[] = [
 		],
 		description:
 			'Legendary off-road capability combined with premium comfort and reliability.',
-		description_ru:
-			'Легендарная проходимость в сочетании с премиальным комфортом и надежностью.',
 		features: [
 			'Full-time 4WD',
 			'KDSS suspension',
@@ -175,28 +127,14 @@ export const mockCars: Car[] = [
 			'Premium leather interior',
 			'Multi-terrain select',
 		],
-		features_ru: [
-			'Постоянный полный привод',
-			'Подвеска KDSS',
-			'Охлаждаемые передние сиденья',
-			'Салон из премиальной кожи',
-			'Мульти-режим бездорожья',
-		],
 		specifications: {
 			engine: '4.6L V8',
-			engine_ru: '4.6л V8',
 			power: '309 hp',
-			power_ru: '309 л.с.',
 			acceleration: '7.5 seconds (0-100 km/h)',
-			acceleration_ru: '7.5 секунды (0-100 км/ч)',
 			topSpeed: '210 km/h',
-			topSpeed_ru: '210 км/ч',
 			fuelEconomy: '13.5 l/100km',
-			fuelEconomy_ru: '13.5 л/100км',
 			seating: '7 adults',
-			seating_ru: '7 взрослых',
 			cargo: '620 liters',
-			cargo_ru: '620 литров',
 		},
 		available: true,
 		rating: 4.9,
@@ -207,7 +145,6 @@ export const mockCars: Car[] = [
 		id: 5,
 		name: 'Geely Monjaro',
 		category: 'Hybrid SUV',
-		category_ru: 'Гибрид',
 		price: 8500,
 		price_3plus_days: 7650,
 		images: [
@@ -217,8 +154,6 @@ export const mockCars: Car[] = [
 		],
 		description:
 			'Modern hybrid SUV with bold design, advanced tech, and efficient powertrain.',
-		description_ru:
-			'Современный гибридный кроссовер с ярким дизайном, передовыми технологиями и экономичной силовой установкой.',
 		features: [
 			'Hybrid 1.5L Turbo + Electric Motor',
 			'Panoramic sunroof',
@@ -226,28 +161,14 @@ export const mockCars: Car[] = [
 			'Adaptive cruise control',
 			'360-degree camera',
 		],
-		features_ru: [
-			'Гибридная система 1.5L Turbo + электромотор',
-			'Панорамная крыша',
-			'12.3-дюймовый сенсорный экран',
-			'Адаптивный круиз-контроль',
-			'Камера 360 градусов',
-		],
 		specifications: {
 			engine: '1.5L Turbo Hybrid',
-			engine_ru: '1.5л Turbo + гибрид',
 			power: '190 hp',
-			power_ru: '190 л.с.',
 			acceleration: '8.9 seconds (0-100 km/h)',
-			acceleration_ru: '8.9 секунды (0-100 км/ч)',
 			topSpeed: '200 km/h',
-			topSpeed_ru: '200 км/ч',
 			fuelEconomy: '5.2 l/100km',
-			fuelEconomy_ru: '5.2 л/100км',
 			seating: '5 adults',
-			seating_ru: '5 взрослых',
 			cargo: '480 liters',
-			cargo_ru: '480 литров',
 		},
 		available: true,
 		rating: 4.7,
@@ -258,7 +179,6 @@ export const mockCars: Car[] = [
 		id: 6,
 		name: 'Lexus IS F',
 		category: 'Premium Sedan',
-		category_ru: 'Премиум',
 		price: 23000,
 		price_3plus_days: 20700,
 		images: [
@@ -274,33 +194,19 @@ export const mockCars: Car[] = [
 		],
 		description:
 			'High-performance luxury sedan with a powerful V8 engine and sport-tuned suspension.',
-		description_ru:
-			'Высокопроизводительный люксовый седан с мощным V8 двигателем.',
 		features: [
 			'5.0L V8 Engine',
 			'Premium leather interior',
 			'Mark Levinson audio system',
 		],
-		features_ru: [
-			'Двигатель 5.0L V8',
-			'Салон из премиальной кожи',
-			'Аудиосистема Mark Levinson',
-		],
 		specifications: {
 			engine: '5.0L V8',
-			engine_ru: '5.0л V8',
 			power: '423 hp',
-			power_ru: '423 л.с.',
 			acceleration: '4.7 seconds (0-100 km/h)',
-			acceleration_ru: '4.7 секунды (0-100 км/ч)',
 			topSpeed: '270 km/h',
-			topSpeed_ru: '270 км/ч',
 			fuelEconomy: '12.5 l/100km',
-			fuelEconomy_ru: '12.5 л/100км',
 			seating: '5 adults',
-			seating_ru: '5 взрослых',
 			cargo: '378 liters',
-			cargo_ru: '378 литров',
 		},
 		available: true,
 		rating: 4.9,
@@ -317,7 +223,6 @@ export const mockCars: Car[] = [
 		id: 7,
 		name: 'Li L6 (Серая)',
 		category: 'Premium Electric',
-		category_ru: 'Премиум',
 		price: 15900,
 		price_3plus_days: 14310,
 		images: [
@@ -333,8 +238,6 @@ export const mockCars: Car[] = [
 		],
 		description:
 			'Luxury electric sedan with premium comfort and advanced technology. Elegant gray color.',
-		description_ru:
-			'Роскошный электрический седан с премиальным комфортом и передовыми технологиями. Элегантный серый цвет.',
 		features: [
 			'Long-range battery (700+ km)',
 			'Air suspension',
@@ -342,28 +245,14 @@ export const mockCars: Car[] = [
 			'Advanced driver assistance',
 			'Panoramic sunroof',
 		],
-		features_ru: [
-			'Большой запас хода (700+ км)',
-			'Пневмоподвеска',
-			'Салон из премиальной кожи',
-			'Продвинутые системы помощи водителю',
-			'Панорамная крыша',
-		],
 		specifications: {
 			engine: 'Dual Motor AWD',
-			engine_ru: 'Два мотора, полный привод',
 			power: '500 hp',
-			power_ru: '500 л.с.',
 			acceleration: '4.5 seconds (0-100 km/h)',
-			acceleration_ru: '4.5 секунды (0-100 км/ч)',
 			topSpeed: '250 km/h',
-			topSpeed_ru: '250 км/ч',
 			range: '710 km',
-			range_ru: '710 км',
 			seating: '5 adults',
-			seating_ru: '5 взрослых',
 			cargo: '450 liters',
-			cargo_ru: '450 литров',
 		},
 		available: true,
 		rating: 4.8,
@@ -374,7 +263,6 @@ export const mockCars: Car[] = [
 		id: 8,
 		name: 'Lexus 570',
 		category: 'Luxury SUV',
-		category_ru: 'Люкс',
 		price: 11000,
 		price_3plus_days: 9900,
 		images: [
@@ -390,8 +278,6 @@ export const mockCars: Car[] = [
 		],
 		description:
 			'Luxury full-size SUV with powerful V8 engine and premium comfort features.',
-		description_ru:
-			'Роскошный полноразмерный внедорожник с мощным V8 двигателем и премиальным комфортом.',
 		features: [
 			'5.7L V8 Engine',
 			'Premium leather interior',
@@ -399,28 +285,14 @@ export const mockCars: Car[] = [
 			'Multi-terrain monitor',
 			'Semi-aniline leather seats',
 		],
-		features_ru: [
-			'Двигатель 5.7L V8',
-			'Салон из премиальной кожи',
-			'Аудиосистема Mark Levinson',
-			'Мульти-режим бездорожья',
-			'Кожаные сиденья Semi-aniline',
-		],
 		specifications: {
 			engine: '5.7L V8',
-			engine_ru: '5.7л V8',
 			power: '383 hp',
-			power_ru: '383 л.с.',
 			acceleration: '7.3 seconds (0-100 km/h)',
-			acceleration_ru: '7.3 секунды (0-100 км/ч)',
 			topSpeed: '220 km/h',
-			topSpeed_ru: '220 км/ч',
 			fuelEconomy: '14.7 l/100km',
-			fuelEconomy_ru: '14.7 л/100км',
 			seating: '8 adults',
-			seating_ru: '8 взрослых',
 			cargo: '1200 liters',
-			cargo_ru: '1200 литров',
 		},
 		available: true,
 		rating: 4.9,
