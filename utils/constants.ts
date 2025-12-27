@@ -19,7 +19,7 @@ const getApiBaseUrl = (): string => {
   // Автоматическое определение на основе NODE_ENV
   // Дефолтный production URL (используется если NEXT_PUBLIC_API_BASE_URL не установлен)
   if (process.env.NODE_ENV === 'production') {
-    return 'https://95.163.226.211:8080/api/v1';
+    return 'https://baz-car-server.online/api/v1';
   }
   
   // По умолчанию для development

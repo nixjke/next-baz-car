@@ -10,14 +10,18 @@ const nextConfig: NextConfig = {
         pathname: '/uploads/**',
       },
       {
-        protocol: 'http',
-        hostname: '91.229.11.172',
-        port: '8080',
+        protocol: 'https',
+        hostname: 'baz-car-server.online',
         pathname: '/uploads/**',
       },
       {
         protocol: 'https',
         hostname: 'baz-car.online',
+        pathname: '/uploads/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'baz-car-server.online',
         pathname: '/uploads/**',
       },
     ],
