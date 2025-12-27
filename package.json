@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:remote": "cross-env NEXT_PUBLIC_DEV_API_URL=http://95.163.226.211/api/v1 next dev",
+    "dev:remote": "cross-env NEXT_PUBLIC_DEV_API_URL=https://95.163.226.211/api/v1 next dev",
     "build": "next build",
-    "build:remote": "cross-env NEXT_PUBLIC_API_BASE_URL=http://95.163.226.211/api/v1 next build",
+    "build:remote": "cross-env NEXT_PUBLIC_API_BASE_URL=https://95.163.226.211/api/v1 next build",
     "start": "next start",
     "lint": "eslint"
   },
