@@ -1,11 +1,14 @@
 // Автоматическое определение API URL на основе окружения
+// Приоритет: NEXT_PUBLIC_API_BASE_URL > NEXT_PUBLIC_DEV_API_URL (dev only) > дефолтные значения
 const getApiBaseUrl = (): string => {
-  // Если явно указан URL через переменную окружения - используем его
+  // Если явно указан URL через переменную окружения - используем его (имеет наивысший приоритет)
+  // Эта переменная должна быть установлена во время сборки (next build)
+  // Используется в production и development
   if (process.env.NEXT_PUBLIC_API_BASE_URL) {
     return process.env.NEXT_PUBLIC_API_BASE_URL;
   }
 
-  // В dev режиме можно указать альтернативный сервер
+  // В dev режиме можно указать альтернативный сервер через NEXT_PUBLIC_DEV_API_URL
   if (
     process.env.NODE_ENV !== 'production' &&
     process.env.NEXT_PUBLIC_DEV_API_URL
@@ -14,8 +17,9 @@ const getApiBaseUrl = (): string => {
   }
   
   // Автоматическое определение на основе NODE_ENV
+  // Дефолтный production URL (используется если NEXT_PUBLIC_API_BASE_URL не установлен)
   if (process.env.NODE_ENV === 'production') {
-    return 'http://91.229.11.172:8080/api/v1';
+    return 'http://95.163.226.211:8080/api/v1';
   }
   
   // По умолчанию для development
