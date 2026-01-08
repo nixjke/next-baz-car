@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -42,13 +42,16 @@ export default function CarDetailPageClient({ slug }: CarDetailPageClientProps) 
 	const [car, setCar] = useState<Car | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState<Error | null>(null)
+	const abortControllerRef = useRef<AbortController | null>(null)
 
 	useEffect(() => {
-		console.log('CarDetailPageClient - slug:', slug, 'parsed id:', id)
+		// Отменяем предыдущий запрос если он еще выполняется
+		if (abortControllerRef.current) {
+			abortControllerRef.current.abort()
+		}
 		
 		// Если slug еще не загружен, ждем
 		if (!slug) {
-			console.log('CarDetailPageClient - slug еще не загружен, ждем...')
 			return
 		}
 
@@ -60,31 +63,51 @@ export default function CarDetailPageClient({ slug }: CarDetailPageClientProps) 
 			return
 		}
 
+		// Создаем новый AbortController для этого запроса
+		const abortController = new AbortController()
+		abortControllerRef.current = abortController
+
 		const fetchCar = async () => {
 			try {
 				setLoading(true)
 				setError(null)
-				console.log('CarDetailPageClient - Запрос машины с ID:', id)
 				const carData = await getCarById(id)
-				console.log('CarDetailPageClient - Получены данные машины:', carData)
-				console.log('CarDetailPageClient - Additional Services:', carData?.additional_services)
-				console.log('CarDetailPageClient - Specifications:', carData?.specifications)
-				console.log('CarDetailPageClient - Description:', carData?.description)
-				console.log('CarDetailPageClient - Features:', carData?.features)
+				
+				// Проверяем, не был ли запрос отменен
+				if (abortController.signal.aborted) {
+					return
+				}
+				
 				if (!carData) {
 					setError(new Error('Автомобиль не найден'))
+					setCar(null)
 				} else {
 					setCar(carData)
 				}
-			} catch (err) {
+			} catch (err: any) {
+				// Игнорируем ошибки отмены запроса
+				if (err?.name === 'AbortError' || abortController.signal.aborted) {
+					return
+				}
 				console.error('Error fetching car:', err)
 				setError(err as Error)
+				setCar(null)
 			} finally {
-				setLoading(false)
+				// Устанавливаем loading в false только если запрос не был отменен
+				if (!abortController.signal.aborted) {
+					setLoading(false)
+				}
 			}
 		}
 
 		fetchCar()
+
+		// Cleanup: отменяем запрос при размонтировании или изменении зависимостей
+		return () => {
+			if (abortControllerRef.current) {
+				abortControllerRef.current.abort()
+			}
+		}
 	}, [id, slug])
 
 	const action = searchParams?.get('action')
@@ -131,9 +154,6 @@ export default function CarDetailPageClient({ slug }: CarDetailPageClientProps) 
 		initial: { opacity: 0, y: 15 },
 		animate: { opacity: 1, y: 0, transition: { delay: delay * 0.1, duration: 0.5, ease: "easeOut" as const } },
 	});
-
-	// Отладочная информация
-	console.log('CarDetailPageClient render - loading:', loading, 'error:', error, 'car:', car, 'id:', id, 'slug:', slug)
 
 	if (loading) {
 		return (

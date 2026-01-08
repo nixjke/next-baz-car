@@ -94,8 +94,9 @@ export const getCarById = async (id: number): Promise<Car | null> => {
 		}
 		
 		const apiCar = await response.json()
-		return transformCar(apiCar)
-	} catch (error) {
+		const transformed = transformCar(apiCar)
+		return transformed
+	} catch (error: any) {
 		console.error(`Error fetching car ${id} on server:`, error)
 		return null
 	}
