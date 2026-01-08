@@ -81,7 +81,7 @@ const DressCodeInfo = () => {
             <span className="text-sm font-semibold uppercase tracking-wider">Ваш гид по стилю</span>
           </div>
           <h2 className="text-4xl font-bold text-foreground mb-3">
-            Дресс-код в Дагестане: Кратко
+            Дресс-код в Дагестане
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Путешествуйте с комфортом и уважением, следуя этим простым визуальным подсказкам.
