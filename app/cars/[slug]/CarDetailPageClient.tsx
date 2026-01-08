@@ -57,7 +57,6 @@ export default function CarDetailPageClient({ slug }: CarDetailPageClientProps) 
 
 		// Если ID не определен, не делаем запрос
 		if (!id) {
-			console.error('CarDetailPageClient - ID не указан, slug:', slug)
 			setError(new Error('ID не указан'))
 			setLoading(false)
 			return
@@ -89,7 +88,6 @@ export default function CarDetailPageClient({ slug }: CarDetailPageClientProps) 
 				if (err?.name === 'AbortError' || abortController.signal.aborted) {
 					return
 				}
-				console.error('Error fetching car:', err)
 				setError(err as Error)
 				setCar(null)
 			} finally {

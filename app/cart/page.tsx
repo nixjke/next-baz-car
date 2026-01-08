@@ -97,12 +97,12 @@ export default function CartPage() {
 						if (parsed.code && parsed.discount) {
 							qrCodeData = {
 								code: parsed.code,
-								discount: parsed.discount,
-							}
+							discount: parsed.discount,
 						}
-					} catch (e) {
-						console.error('Error parsing QR code data:', e)
 					}
+				} catch (e) {
+					// Ошибка парсинга QR кода
+				}
 				}
 			}
 

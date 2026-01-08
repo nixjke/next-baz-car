@@ -105,7 +105,6 @@ const AdditionalServicesSection = ({ onCarDetailPage = false }) => {
 					setServices(allServices)
 				}
 			} catch (error) {
-				console.error('Error fetching services:', error)
 				setServices([])
 			} finally {
 				setLoading(false)

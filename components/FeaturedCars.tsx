@@ -21,7 +21,6 @@ const FeaturedCars = () => {
 				const cars = await getFeaturedCars(4)
 				setFeaturedCars(cars)
 			} catch (err) {
-				console.error('Error fetching featured cars:', err)
 				setError(err as Error)
 			} finally {
 				setLoading(false)

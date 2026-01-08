@@ -59,9 +59,6 @@ const transformCar = (apiCar: any): Car => {
 		specifications = normalizedSpecs
 	}
 	
-	// Логируем для отладки
-	console.log('TransformCar - additional_services from API:', apiCar.additional_services)
-	
 	return {
 		id: apiCar.id,
 		name: apiCar.name,
@@ -91,7 +88,6 @@ export const getAllCars = async (): Promise<Car[]> => {
 		const cars = Array.isArray(response.data) ? response.data : []
 		return cars.map(transformCar)
 	} catch (error) {
-		console.error('Error fetching all cars:', error)
 		throw error
 	}
 }
@@ -105,15 +101,12 @@ export const getCarById = async (id: number): Promise<Car | null> => {
 				_t: Date.now() // Добавляем timestamp для предотвращения кеширования
 			}
 		})
-		console.log('getCarById - Raw API response:', response.data)
 		const transformed = transformCar(response.data)
-		console.log('getCarById - Transformed car:', transformed)
 		return transformed
 	} catch (error: any) {
 		if (error.response?.status === 404) {
 			return null
 		}
-		console.error(`Error fetching car ${id}:`, error)
 		throw error
 	}
 }
@@ -125,7 +118,6 @@ export const getFeaturedCars = async (limit: number = 6): Promise<Car[]> => {
 		const cars = Array.isArray(response.data) ? response.data : []
 		return cars.map(transformCar)
 	} catch (error) {
-		console.error('Error fetching featured cars:', error)
 		// В случае ошибки возвращаем пустой массив
 		return []
 	}
@@ -137,7 +129,6 @@ export const getCarsMeta = async (): Promise<any> => {
 		const response = await axiosInstance.get(`${API_CONFIG.ENDPOINTS.CARS}meta`)
 		return response.data
 	} catch (error) {
-		console.error('Error fetching cars meta:', error)
 		return {}
 	}
 }
@@ -163,7 +154,6 @@ export const getCarServices = async (carId: number): Promise<AdditionalService[]
 		const services = Array.isArray(response.data) ? response.data : []
 		return services
 	} catch (error) {
-		console.error(`Error fetching car services for car ${carId}:`, error)
 		return []
 	}
 }
@@ -175,7 +165,6 @@ export const getAllAdditionalServices = async (): Promise<AdditionalService[]> =
 		const services = Array.isArray(response.data) ? response.data : []
 		return services
 	} catch (error) {
-		console.error('Error fetching additional services:', error)
 		return []
 	}
 }

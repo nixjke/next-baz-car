@@ -120,7 +120,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 					setCartItems(parsed)
 				}
 			} catch (error) {
-				console.error('Error loading cart from localStorage:', error)
+				// Ошибка загрузки корзины из localStorage
 			}
 		}
 	}, [])
@@ -131,7 +131,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 		try {
 			localStorage.setItem(STORAGE_KEY, JSON.stringify(cartItems))
 		} catch (error) {
-			console.error('Error saving cart to localStorage:', error)
+			// Ошибка сохранения корзины в localStorage
 		}
 	}, [cartItems, mounted])
 

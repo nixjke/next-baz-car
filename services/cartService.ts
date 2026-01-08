@@ -110,7 +110,6 @@ export const createCartBooking = async (
 		)
 		return response.data
 	} catch (error: any) {
-		console.error('Error creating cart booking:', error)
 		throw new Error(
 			error.response?.data?.detail || error.message || 'Не удалось создать заказ'
 		)

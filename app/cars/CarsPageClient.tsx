@@ -76,7 +76,6 @@ export default function CarsPageClient() {
 				const minPrice = prices.length > 0 ? Math.min(...prices) : 0
 				setPriceRange([minPrice, maxPrice])
 			} catch (err) {
-				console.error('Error fetching cars:', err)
 				setError(err as Error)
 			} finally {
 				setLoading(false)

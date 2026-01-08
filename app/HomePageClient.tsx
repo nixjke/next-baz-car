@@ -76,7 +76,7 @@ export default function HomePageClient() {
 					setPrizeCar(car)
 				}
 			} catch (error) {
-				console.error('Error fetching prize car:', error)
+				// Ошибка при загрузке призовой машины
 			}
 		}
 		fetchPrizeCar()

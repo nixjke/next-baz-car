@@ -361,7 +361,6 @@ const BookingForm = ({
 				)
 				setAdditionalServices(filteredServices)
 			} catch (error) {
-				console.error('Error fetching car services:', error)
 				setAdditionalServices([])
 			} finally {
 				setLoadingServices(false)
