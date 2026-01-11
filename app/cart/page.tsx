@@ -114,8 +114,8 @@ export default function CartPage() {
 				description: 'Вы будете перенаправлены в WhatsApp для отправки деталей заказа.',
 			})
 
-			// Открываем WhatsApp в новой вкладке
-			window.open(response.whatsapp_link, '_blank')
+			// Открываем WhatsApp (на мобильных откроет приложение, на десктопе - WhatsApp Web)
+			window.location.href = response.whatsapp_link
 		} catch (error: any) {
 			toast({
 				title: 'Ошибка',
