@@ -52,7 +52,7 @@ const Hero = () => {
         <motion.h1 
           custom={1}
           variants={textVariants}
-          className="text-5xl md:text-7xl font-extrabold text-foreground mb-6 leading-tight [text-shadow:0_2px_4px_rgba(0,0,0,0.1)]"
+          className="text-4xl md:text-7xl font-extrabold text-foreground mb-6 leading-tight [text-shadow:0_2px_4px_rgba(0,0,0,0.1)]"
         >
           Путешествуйте Стильно с <span className="gradient-text drop-shadow-sm">BazCar</span>
         </motion.h1>
@@ -60,9 +60,9 @@ const Hero = () => {
         <motion.p 
           custom={2}
           variants={textVariants}
-          className="text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto mb-10 [text-shadow:0_1px_2px_rgba(0,0,0,0.05)]"
+          className="text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto mb-10 px-4 sm:px-0 [text-shadow:0_1px_2px_rgba(0,0,0,0.05)]"
         >
-          Откройте для себя безупречный опыт аренды автомобилей. Выбирайте из нашей тщательно подобранной коллекции премиальных, экологичных и стильных автомобилей.
+          Откройте для себя премиальный уровень аренды автомобилей. В нашем автопарке — стильные и современные модели для комфортных поездок.
         </motion.p>
         
         <motion.div 
@@ -72,7 +72,7 @@ const Hero = () => {
         >
           <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
             <Button size="lg" asChild className="shadow-lg">
-              <Link href="/cars">Посмотреть Автопарк</Link>
+              <Link href="/cars">Посмотреть автопарк</Link>
             </Button>
           </motion.div>
         </motion.div>
