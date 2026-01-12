@@ -46,6 +46,12 @@ const Navbar = () => {
 		setTheme(theme === 'dark' ? 'light' : 'dark')
 	}
 
+	const handleThemeToggle = (e: React.MouseEvent | React.TouchEvent) => {
+		e.preventDefault()
+		e.stopPropagation()
+		toggleTheme()
+	}
+
 	const navLinkClasses = (href: string) =>
 		`relative font-medium pb-1.5 transition-colors duration-200 ease-out hover:text-primary ${
 			pathname === href
@@ -118,9 +124,12 @@ const Navbar = () => {
           </Button>
 
           <Button
+            type="button"
             variant="outline"
             size="icon"
-            onClick={toggleTheme}
+            onClick={handleThemeToggle}
+            onMouseDown={(e) => e.preventDefault()}
+            onTouchStart={handleThemeToggle}
             className="rounded-full"
             aria-label={theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на темную тему'}
           >

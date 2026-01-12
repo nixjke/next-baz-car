@@ -225,17 +225,6 @@ export default function HomePageClient() {
 			</motion.section>
 
 			<motion.section
-				id="features"
-				variants={sectionVariants}
-				initial="hidden"
-				whileInView="visible"
-				viewport={{ once: true, amount: 0.2 }}
-				className="py-16 md:py-24 bg-background"
-			>
-				<Features />
-			</motion.section>
-
-			<motion.section
 				id="featured-cars"
 				variants={sectionVariants}
 				initial="hidden"
@@ -244,6 +233,17 @@ export default function HomePageClient() {
 				className="py-16 md:py-24 bg-secondary/20"
 			>
 				<FeaturedCars />
+			</motion.section>
+
+			<motion.section
+				id="features"
+				variants={sectionVariants}
+				initial="hidden"
+				whileInView="visible"
+				viewport={{ once: true, amount: 0.2 }}
+				className="py-16 md:py-24 bg-background"
+			>
+				<Features />
 			</motion.section>
 
 			<motion.section
