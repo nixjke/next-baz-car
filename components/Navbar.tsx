@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -29,6 +29,7 @@ const Navbar = () => {
 	const { theme, setTheme } = useTheme()
 	const { cartItems } = useCart()
 	const cartItemsCount = cartItems.length
+	const touchStartRef = useRef(false)
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -47,6 +48,12 @@ const Navbar = () => {
 	}
 
 	const handleThemeToggle = (e: React.MouseEvent | React.TouchEvent) => {
+		// Если это click после touchstart, игнорируем
+		if (e.type === 'click' && touchStartRef.current) {
+			touchStartRef.current = false
+			return
+		}
+		
 		e.preventDefault()
 		e.stopPropagation()
 		toggleTheme()
@@ -128,8 +135,17 @@ const Navbar = () => {
             variant="outline"
             size="icon"
             onClick={handleThemeToggle}
-            onMouseDown={(e) => e.preventDefault()}
-            onTouchStart={handleThemeToggle}
+            onMouseDown={(e) => {
+				e.preventDefault()
+			}}
+            onTouchStart={(e) => {
+				touchStartRef.current = true
+				handleThemeToggle(e)
+				// Сбрасываем флаг через небольшую задержку, чтобы поймать последующий click
+				setTimeout(() => {
+					touchStartRef.current = false
+				}, 300)
+			}}
             className="rounded-full"
             aria-label={theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на темную тему'}
           >
