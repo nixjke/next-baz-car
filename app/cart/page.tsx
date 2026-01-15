@@ -6,12 +6,10 @@ import { motion } from 'framer-motion'
 import { useCart } from '@/context/CartContext'
 import { createCartBooking } from '@/services/cartService'
 import { useToast } from '@/components/ui/use-toast'
-import { CartStepIndicator } from '@/components/cart/CartStepIndicator'
 import { CartItemCard } from '@/components/cart/CartItemCard'
 import { CartSummary } from '@/components/cart/CartSummary'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ShoppingBag, ArrowLeft, Loader2, CheckCircle2 } from 'lucide-react'
+import { ShoppingBag, ArrowLeft, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 
 const QR_CODE_STORAGE_KEY = 'bazcar_qr_code'
@@ -20,48 +18,32 @@ export default function CartPage() {
 	const router = useRouter()
 	const { cartItems, removeFromCart, clearCart, getCartTotal } = useCart()
 	const { toast } = useToast()
-	const [currentStep, setCurrentStep] = useState(1)
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [whatsappLink, setWhatsappLink] = useState<string | null>(null)
 
 	useEffect(() => {
-		// Если корзина пуста и мы не на шаге подтверждения, перенаправляем
-		if (cartItems.length === 0 && currentStep !== 2 && !whatsappLink) {
+		// Если корзина пуста и нет WhatsApp ссылки, перенаправляем
+		if (cartItems.length === 0 && !whatsappLink) {
 			router.push('/cars')
 		}
-	}, [cartItems.length, currentStep, router, whatsappLink])
-
-	const handleProceedToConfirmation = () => {
-		if (cartItems.length === 0) {
-			toast({
-				title: 'Корзина пуста',
-				description: 'Добавьте автомобили в корзину перед оформлением заказа',
-				variant: 'destructive',
-			})
-			return
-		}
-		// Проверяем, что у всех элементов корзины есть контактная информация
-		const missingContacts = cartItems.some(item => !item.name || !item.phone)
-		if (missingContacts) {
-			toast({
-				title: 'Неполные данные',
-				description: 'У некоторых позиций отсутствует контактная информация. Пожалуйста, проверьте данные.',
-				variant: 'destructive',
-			})
-			return
-		}
-		setCurrentStep(2)
-	}
-
-	const handleBackToCart = () => {
-		setCurrentStep(1)
-	}
+	}, [cartItems.length, router, whatsappLink])
 
 	const handleCreateBooking = async () => {
 		if (cartItems.length === 0) {
 			toast({
 				title: 'Корзина пуста',
 				description: 'Добавьте автомобили в корзину перед оформлением заказа',
+				variant: 'destructive',
+			})
+			return
+		}
+
+		// Проверяем, что у всех элементов корзины есть контактная информация
+		const missingContacts = cartItems.some(item => !item.name || !item.phone)
+		if (missingContacts) {
+			toast({
+				title: 'Неполные данные',
+				description: 'У некоторых позиций отсутствует контактная информация. Пожалуйста, проверьте данные.',
 				variant: 'destructive',
 			})
 			return
@@ -168,116 +150,28 @@ export default function CartPage() {
 					</p>
 				</div>
 
-				<CartStepIndicator currentStep={currentStep} />
+				<motion.div
+					initial={{ opacity: 0, x: -20 }}
+					animate={{ opacity: 1, x: 0 }}
+					className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start"
+				>
+					<div className="lg:col-span-2 space-y-6">
+						{cartItems.map((item) => (
+							<CartItemCard key={item.id} item={item} onRemove={removeFromCart} />
+						))}
+					</div>
 
-				{/* Шаг 1: Просмотр корзины */}
-				{currentStep === 1 && (
-					<motion.div
-						initial={{ opacity: 0, x: -20 }}
-						animate={{ opacity: 1, x: 0 }}
-						className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start"
-					>
-						<div className="lg:col-span-2 space-y-6">
-							{cartItems.map((item) => (
-								<CartItemCard key={item.id} item={item} onRemove={removeFromCart} />
-							))}
-						</div>
-
-						<div className="lg:col-span-1">
-							<CartSummary
-								cartItems={cartItems}
-								total={getCartTotal()}
-								onClear={clearCart}
-								onProceed={handleProceedToConfirmation}
-								proceedLabel="Оформить заказ"
-							/>
-						</div>
-					</motion.div>
-				)}
-
-				{/* Шаг 2: Подтверждение */}
-				{currentStep === 2 && (
-					<motion.div
-						initial={{ opacity: 0, x: -20 }}
-						animate={{ opacity: 1, x: 0 }}
-						className="max-w-4xl mx-auto space-y-6"
-					>
-						<Card>
-							<CardHeader>
-								<CardTitle>Подтверждение заказа</CardTitle>
-							</CardHeader>
-							<CardContent className="space-y-6">
-								<div>
-									<h3 className="font-semibold mb-3">Позиции в заказе:</h3>
-									<div className="space-y-4">
-										{cartItems.map((item) => (
-											<div key={item.id} className="border-b pb-4 last:border-0">
-												<p className="font-medium">{item.car.name}</p>
-												<p className="text-sm text-muted-foreground">
-													{item.pickupDate} - {item.returnDate} ({item.rentalDays} дн.)
-												</p>
-												<p className="text-sm font-medium">
-													{item.totalPrice.toLocaleString('ru-RU')} ₽
-												</p>
-											</div>
-										))}
-									</div>
-								</div>
-
-								{cartItems.length > 0 && (
-									<div>
-										<h3 className="font-semibold mb-3">Контактная информация:</h3>
-										<div className="space-y-1 text-sm">
-											<p>
-												<strong>Имя:</strong> {cartItems[0].name}
-											</p>
-											<p>
-												<strong>Телефон:</strong> {cartItems[0].phone}
-											</p>
-											{cartItems[0].email && (
-												<p>
-													<strong>Email:</strong> {cartItems[0].email}
-												</p>
-											)}
-										</div>
-									</div>
-								)}
-
-								<div className="pt-4 border-t">
-									<div className="flex justify-between items-center text-xl">
-										<span className="font-medium">Итого к оплате:</span>
-										<span className="font-bold text-primary text-2xl">
-											{getCartTotal().toLocaleString('ru-RU')} ₽
-										</span>
-									</div>
-								</div>
-							</CardContent>
-						</Card>
-
-						<div className="flex gap-3">
-							<Button variant="outline" onClick={handleBackToCart} className="flex-1">
-								Назад
-							</Button>
-							<Button
-								onClick={handleCreateBooking}
-								disabled={isSubmitting}
-								className="flex-1 bg-gradient-to-r from-primary to-green-400 hover:from-primary/90 hover:to-green-400/90"
-							>
-								{isSubmitting ? (
-									<>
-										<Loader2 className="h-4 w-4 mr-2 animate-spin" />
-										Обработка...
-									</>
-								) : (
-									<>
-										<CheckCircle2 className="h-4 w-4 mr-2" />
-										Оформить через WhatsApp
-									</>
-								)}
-							</Button>
-						</div>
-					</motion.div>
-				)}
+					<div className="lg:col-span-1">
+						<CartSummary
+							cartItems={cartItems}
+							total={getCartTotal()}
+							onClear={clearCart}
+							onProceed={handleCreateBooking}
+							proceedLabel="Оформить через WhatsApp"
+							isSubmitting={isSubmitting}
+						/>
+					</div>
+				</motion.div>
 			</motion.div>
 		</div>
 	)

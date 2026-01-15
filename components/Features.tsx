@@ -43,10 +43,9 @@ const Features = () => {
                     viewport={{once: true}}
                     transition={{duration: 0.5}}
                 >
-                    <h2 className="text-4xl font-bold text-foreground mb-3">Почему выбирают нас</h2>
+                    <h2 className="text-4xl font-bold text-foreground mb-3">Почему выбирают нас?</h2>
                     <p className="text-muted-foreground max-w-2xl mx-auto">
-                        Мы предоставляем исключительный сервис и премиальные автомобили, чтобы ваше путешествие было
-                        комфортным и запоминающимся.
+                        Мы предоставляем высокий уровень сервиса и премиальные автомобили, чтобы каждая поездка была комфортной и оставляла приятные впечатления.
                     </p>
                 </motion.div>
 

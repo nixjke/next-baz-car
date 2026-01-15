@@ -3,7 +3,7 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { Info, Trash2 } from 'lucide-react'
+import { Info, Trash2, Loader2 } from 'lucide-react'
 import { type CartItem } from '@/context/CartContext'
 
 type CartSummaryProps = {
@@ -13,6 +13,7 @@ type CartSummaryProps = {
 	onProceed?: () => void
 	proceedLabel?: string
 	showProceedButton?: boolean
+	isSubmitting?: boolean
 }
 
 export function CartSummary({
@@ -22,6 +23,7 @@ export function CartSummary({
 	onProceed,
 	proceedLabel = 'Продолжить',
 	showProceedButton = true,
+	isSubmitting = false,
 }: CartSummaryProps) {
 	return (
 		<Card className="sticky top-24">
@@ -47,22 +49,31 @@ export function CartSummary({
 					</span>
 				</div>
 			</CardContent>
-			{showProceedButton && (
+				{showProceedButton && (
 				<CardFooter className="p-6 flex flex-col space-y-3">
 					{onProceed && (
 						<Button
 							size="lg"
-							className="w-full text-base py-3 shadow-lg bg-gradient-to-r from-primary to-green-400 hover:from-primary/90 hover:to-green-400/90 text-primary-foreground"
+							disabled={isSubmitting}
+							className="w-full text-base py-3 shadow-lg bg-gradient-to-r from-primary to-green-400 hover:from-primary/90 hover:to-green-400/90 text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed"
 							onClick={onProceed}
 						>
-							{proceedLabel}
+							{isSubmitting ? (
+								<>
+									<Loader2 className="h-4 w-4 mr-2 animate-spin" />
+									Обработка...
+								</>
+							) : (
+								proceedLabel
+							)}
 						</Button>
 					)}
 					<Button
 						variant="outline"
 						size="lg"
 						onClick={onClear}
-						className="w-full border-destructive/50 text-destructive hover:bg-destructive/10"
+						disabled={isSubmitting}
+						className="w-full border-destructive/50 text-destructive hover:bg-destructive/10 disabled:opacity-50 disabled:cursor-not-allowed"
 					>
 						<Trash2 className="h-4 w-4 mr-2" /> Очистить корзину
 					</Button>
