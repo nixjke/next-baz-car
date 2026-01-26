@@ -11,6 +11,7 @@ import { CartSummary } from '@/components/cart/CartSummary'
 import { Button } from '@/components/ui/button'
 import { ShoppingBag, ArrowLeft, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { reachGoal } from '@/lib/metrika'
 
 const QR_CODE_STORAGE_KEY = 'bazcar_qr_code'
 
@@ -96,8 +97,16 @@ export default function CartPage() {
 				description: 'Вы будете перенаправлены в WhatsApp для отправки деталей заказа.',
 			})
 
-			// Открываем WhatsApp (на мобильных откроет приложение, на десктопе - WhatsApp Web)
-			window.location.href = response.whatsapp_link
+			reachGoal('lead_form_submit', {
+				car: firstItem.car.name,
+				start_date: firstItem.pickupDate,
+				end_date: firstItem.returnDate,
+			})
+
+			// Открываем WhatsApp после задержки, чтобы Метрика успела зафиксировать цель
+			setTimeout(() => {
+				window.location.href = response.whatsapp_link
+			}, 300)
 		} catch (error: any) {
 			toast({
 				title: 'Ошибка',

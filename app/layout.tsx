@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Providers } from '@/components/Providers'
 import { YandexMetrika } from '@/components/YandexMetrika'
+import { PhoneClickTracker } from '@/components/PhoneClickTracker'
 
 export const metadata: Metadata = {
 	metadataBase: new URL('https://baz-car.ru'),
@@ -63,6 +64,7 @@ export default function RootLayout({
 		<html lang="ru" suppressHydrationWarning>
 			<body>
 				<YandexMetrika />
+				<PhoneClickTracker />
 				<Providers>{children}</Providers>
 			</body>
 		</html>

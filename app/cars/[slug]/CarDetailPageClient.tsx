@@ -29,6 +29,7 @@ import {
 	CreditCard,
 	Loader2,
 } from 'lucide-react'
+import { reachGoal } from '@/lib/metrika'
 
 type CarDetailPageClientProps = {
 	slug: string
@@ -124,6 +125,12 @@ export default function CarDetailPageClient({ slug }: CarDetailPageClientProps) 
 			}
 		}
 	}, [action, id])
+
+	useEffect(() => {
+		if (car) {
+			reachGoal('view_car', { car_name: car.name })
+		}
+	}, [car?.id])
 
 	// Функция для перевода типа топлива на русский
 	const getFuelTypeLabel = (fuelType: string | undefined): string => {
