@@ -21,6 +21,7 @@ import {
 	Gamepad2,
 	ShoppingCart,
 } from 'lucide-react'
+import { USE_CART } from '@/config/featureFlags'
 import {
   Dialog,
   DialogContent,
@@ -170,10 +171,12 @@ const CarCardFooterActions = ({
 	car,
 	onQuickBook,
 	onAddToCart,
+	showAddToCart,
 }: {
 	car: Car
 	onQuickBook: (e: React.MouseEvent) => void
 	onAddToCart: (e: React.MouseEvent) => void
+	showAddToCart: boolean
 }) => {
   const displayPrice = car?.price || car?.price_3plus_days || 0;
   return (
@@ -185,15 +188,17 @@ const CarCardFooterActions = ({
           <span className="text-muted-foreground text-xxs sm:text-xs">/день</span>
         </div>
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={onAddToCart}
-            className="border-primary text-primary hover:bg-primary/10 hover:text-primary text-xs sm:text-sm"
-            aria-label="Добавить в корзину"
-          >
-            <ShoppingCart className="mr-1.5 h-3.5 w-3.5 sm:h-4 sm:w-4" /> В корзину
-          </Button>
+          {showAddToCart && (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={onAddToCart}
+              className="border-primary text-primary hover:bg-primary/10 hover:text-primary text-xs sm:text-sm"
+              aria-label="Добавить в корзину"
+            >
+              <ShoppingCart className="mr-1.5 h-3.5 w-3.5 sm:h-4 sm:w-4" /> В корзину
+            </Button>
+          )}
           <Button 
             variant="outline" 
             size="icon" 
@@ -257,7 +262,7 @@ const CarCard = ({ car }: { car: Car }) => {
 				<CarCardImage car={car} />
 				<CarCardHeaderContent car={car} />
 				<CarCardMainContent car={car} />
-				<CarCardFooterActions car={car} onQuickBook={handleQuickBook} onAddToCart={handleAddToCart} />
+				<CarCardFooterActions car={car} onQuickBook={handleQuickBook} onAddToCart={handleAddToCart} showAddToCart={USE_CART} />
 			</Card>
 		</motion.div>
 	)

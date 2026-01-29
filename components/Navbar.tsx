@@ -15,6 +15,7 @@ import {
 import { Menu, X, MapPinned, Sun, Moon, ShoppingCart } from 'lucide-react'
 import { useTheme } from '@/context/ThemeProvider'
 import { useCart } from '@/context/CartContext'
+import { USE_CART } from '@/config/featureFlags'
 
 const navItems = [
   { label: 'Главная', href: '/' },
@@ -113,22 +114,24 @@ const Navbar = () => {
 		</div>
 
         <div className="flex items-center gap-3">
-          <Button
-            variant="outline"
-            size="icon"
-            asChild
-            className="relative rounded-full"
-            aria-label="Корзина"
-          >
-            <Link href="/cart">
-              <ShoppingCart className="h-5 w-5" />
-              {cartItemsCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartItemsCount > 9 ? '9+' : cartItemsCount}
-                </span>
-              )}
-            </Link>
-          </Button>
+          {USE_CART && (
+            <Button
+              variant="outline"
+              size="icon"
+              asChild
+              className="relative rounded-full"
+              aria-label="Корзина"
+            >
+              <Link href="/cart">
+                <ShoppingCart className="h-5 w-5" />
+                {cartItemsCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartItemsCount > 9 ? '9+' : cartItemsCount}
+                  </span>
+                )}
+              </Link>
+            </Button>
+          )}
 
           <Button
             type="button"
@@ -207,23 +210,25 @@ const Navbar = () => {
 					{item.label}
 				</Link>
 			))}
-			<Button
-				variant="outline"
-				size="lg"
-				asChild
-				className="w-full mt-4 relative"
-				onClick={() => setIsSheetOpen(false)}
-			>
-				<Link href="/cart">
-					<ShoppingCart className="mr-2 h-5 w-5" />
-					Корзина
-					{cartItemsCount > 0 && (
-						<span className="ml-2 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-							{cartItemsCount > 9 ? '9+' : cartItemsCount}
-						</span>
-					)}
-				</Link>
-			</Button>
+			{USE_CART && (
+				<Button
+					variant="outline"
+					size="lg"
+					asChild
+					className="w-full mt-4 relative"
+					onClick={() => setIsSheetOpen(false)}
+				>
+					<Link href="/cart">
+						<ShoppingCart className="mr-2 h-5 w-5" />
+						Корзина
+						{cartItemsCount > 0 && (
+							<span className="ml-2 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+								{cartItemsCount > 9 ? '9+' : cartItemsCount}
+							</span>
+						)}
+					</Link>
+				</Button>
+			)}
 			<Button asChild size="lg" className="w-full mt-4 group">
 				<Link href="/cars" onClick={() => setIsSheetOpen(false)}>
 					Забронировать{' '}

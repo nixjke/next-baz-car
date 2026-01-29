@@ -39,4 +39,6 @@ export const API_CONFIG = {
 export const getServerBaseUrl = (): string => {
   const apiUrl = API_CONFIG.BASE_URL;
   return apiUrl.replace('/api/v1', '');
-}; 
+};
+
+export const QR_CODE_STORAGE_KEY = 'bazcar_qr_code' 

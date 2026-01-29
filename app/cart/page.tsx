@@ -12,8 +12,8 @@ import { Button } from '@/components/ui/button'
 import { ShoppingBag, ArrowLeft, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { reachGoal } from '@/lib/metrika'
-
-const QR_CODE_STORAGE_KEY = 'bazcar_qr_code'
+import { USE_CART } from '@/config/featureFlags'
+import { QR_CODE_STORAGE_KEY } from '@/utils/constants'
 
 export default function CartPage() {
 	const router = useRouter()
@@ -23,11 +23,19 @@ export default function CartPage() {
 	const [whatsappLink, setWhatsappLink] = useState<string | null>(null)
 
 	useEffect(() => {
+		if (!USE_CART) {
+			router.replace('/cars')
+			return
+		}
 		// Если корзина пуста и нет WhatsApp ссылки, перенаправляем
 		if (cartItems.length === 0 && !whatsappLink) {
 			router.push('/cars')
 		}
-	}, [cartItems.length, router, whatsappLink])
+	}, [USE_CART, cartItems.length, router, whatsappLink])
+
+	if (!USE_CART) {
+		return null
+	}
 
 	const handleCreateBooking = async () => {
 		if (cartItems.length === 0) {

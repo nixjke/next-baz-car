@@ -33,12 +33,17 @@ import {
 	Settings,
 	LucideIcon,
 	Loader2,
+	MessageCircle,
 } from 'lucide-react'
 import { getCarServices, type AdditionalService } from '@/services/carService'
 import { useCart } from '@/context/CartContext'
 import { deliveryOptionsData } from '@/config/bookingOptions'
 import { useRouter } from 'next/navigation'
 import { type Car } from '@/data/mockCars'
+import { USE_CART } from '@/config/featureFlags'
+import { createCartBooking } from '@/services/cartService'
+import { reachGoal } from '@/lib/metrika'
+import { QR_CODE_STORAGE_KEY } from '@/utils/constants'
 
 type IconKey =
 	| 'CalendarIcon'
@@ -347,6 +352,7 @@ const BookingForm = ({
 	const [formData, setFormData] = useState<FormData>(initialFormData)
 	const [additionalServices, setAdditionalServices] = useState<AdditionalService[]>([])
 	const [loadingServices, setLoadingServices] = useState(true)
+	const [isSubmitting, setIsSubmitting] = useState(false)
 
 	// Загружаем дополнительные услуги для машины
 	useEffect(() => {
@@ -521,6 +527,89 @@ const BookingForm = ({
 		// router.push('/cart')
 	}
 
+	const buildCartItemForApi = useCallback(() => {
+		const selectedDeliveryOption = deliveryOptionsData.find(
+			opt => opt.id === formData.deliveryOption
+		) || deliveryOptionsData[0]
+		const pickupDate = formData.dateRange.from!.toISOString().split('T')[0]
+		const returnDate = formData.dateRange.to!.toISOString().split('T')[0]
+		return {
+			id: 'direct-1',
+			car,
+			pickupDate,
+			returnDate,
+			name: formData.name,
+			email: formData.email || undefined,
+			phone: formData.phone,
+			deliveryOption: {
+				id: selectedDeliveryOption.id,
+				label: selectedDeliveryOption.label,
+				price: selectedDeliveryOption.price,
+			},
+			youngDriver: formData.youngDriver || (formData as any)['youngDriver'] || false,
+			childSeat: formData.childSeat || (formData as any)['childSeat'] || false,
+			personalDriver: formData.personalDriver || (formData as any)['personalDriver'] || false,
+			ps5: formData.ps5 || (formData as any)['ps5'] || false,
+			transmission: formData.transmission || (formData as any)['transmission'] || false,
+			rentalDays,
+			dailyPrice,
+			totalPrice: currentItemTotal,
+		}
+	}, [car, formData, rentalDays, dailyPrice, currentItemTotal])
+
+	const handleWhatsAppSubmit = async (e: React.FormEvent) => {
+		e.preventDefault()
+		if (!validateForm()) return
+
+		setIsSubmitting(true)
+		try {
+			const item = buildCartItemForApi()
+			let qrCodeData: { code: string; discount: number } | undefined
+			if (typeof window !== 'undefined') {
+				const stored = localStorage.getItem(QR_CODE_STORAGE_KEY)
+				if (stored) {
+					try {
+						const parsed = JSON.parse(stored)
+						if (parsed.code && parsed.discount) {
+							qrCodeData = { code: parsed.code, discount: parsed.discount }
+						}
+					} catch {
+						// ignore
+					}
+				}
+			}
+
+			const response = await createCartBooking(
+				[item],
+				{ name: formData.name, phone: formData.phone, email: formData.email || undefined },
+				qrCodeData
+			)
+
+			toast({
+				title: 'Заказ готов!',
+				description: 'Вы будете перенаправлены в WhatsApp для отправки деталей заказа.',
+			})
+
+			reachGoal('lead_form_submit', {
+				car: car.name,
+				start_date: item.pickupDate,
+				end_date: item.returnDate,
+			})
+
+			setTimeout(() => {
+				window.location.href = response.whatsapp_link
+			}, 300)
+		} catch (error: any) {
+			toast({
+				title: 'Ошибка',
+				description: error.message || 'Не удалось создать заказ',
+				variant: 'destructive',
+			})
+		} finally {
+			setIsSubmitting(false)
+		}
+	}
+
 	return (
 		<motion.div 
 			className="booking-form p-6 lg:p-8 shadow-xl rounded-lg bg-card border border-border/30"
@@ -530,7 +619,7 @@ const BookingForm = ({
 		>
       <h3 className="text-2xl font-bold text-foreground mb-6 text-center md:text-left">Оформить аренду</h3>
 
-	<form className="space-y-5" onSubmit={handleAddToCart}>
+	<form className="space-y-5" onSubmit={USE_CART ? handleAddToCart : handleWhatsAppSubmit}>
         <div className="space-y-1.5">
           <Label className="flex items-center text-sm font-medium text-foreground">
             <CalendarIcon className="h-4 w-4 mr-2 text-primary" />
@@ -665,12 +754,31 @@ const BookingForm = ({
             />
           )}
 
-          <Button type="submit" className="w-full text-base py-3 shadow-lg bg-gradient-to-r from-primary to-green-400 hover:from-primary/90 hover:to-green-400/90 text-primary-foreground transition-all duration-300 ease-in-out transform hover:scale-[1.02]">
-            <ShoppingCart className="h-5 w-5 mr-2" /> Добавить в корзину
+          <Button
+            type="submit"
+            disabled={!USE_CART && isSubmitting}
+            className="w-full text-base py-3 shadow-lg bg-gradient-to-r from-primary to-green-400 hover:from-primary/90 hover:to-green-400/90 text-primary-foreground transition-all duration-300 ease-in-out transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {USE_CART ? (
+              <>
+                <ShoppingCart className="h-5 w-5 mr-2" /> Добавить в корзину
+              </>
+            ) : (
+              <>
+                {isSubmitting ? (
+                  <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                ) : (
+                  <MessageCircle className="h-5 w-5 mr-2" />
+                )}
+                {isSubmitting ? 'Обработка...' : 'Оформить через WhatsApp'}
+              </>
+            )}
           </Button>
-          <p className="text-xs text-muted-foreground mt-3 text-center">
-            Вы сможете просмотреть и оформить все выбранные авто из корзины.
-          </p>
+          {USE_CART && (
+            <p className="text-xs text-muted-foreground mt-3 text-center">
+              Вы сможете просмотреть и оформить все выбранные авто из корзины.
+            </p>
+          )}
         </div>
 		</form>
 		</motion.div>
