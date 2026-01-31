@@ -15,7 +15,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from '@/components/ui/popover'
-import { format } from 'date-fns'
+import { format, addDays } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import {
 	CalendarIcon,
@@ -381,7 +381,7 @@ const BookingForm = ({
 
 	useEffect(() => {
 		const monthStr = format(calendarMonth, 'yyyy-MM')
-		getUnavailableDates(car.id, monthStr).then(setUnavailableDates)
+		getUnavailableDates(car.id, monthStr, { includeNextMonth: true }).then(setUnavailableDates)
 	}, [car.id, calendarMonth])
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -663,12 +663,25 @@ const BookingForm = ({
                 onMonthChange={setCalendarMonth}
                 selected={formData.dateRange}
                 onSelect={handleDateRangeChange}
-                numberOfMonths={1}
+                numberOfMonths={2}
                 locale={ru}
                 disabled={(date) => {
                   const today = new Date()
                   today.setHours(0, 0, 0, 0)
-                  return date < today || unavailableDates.includes(format(date, 'yyyy-MM-dd'))
+                  const dateStr = format(date, 'yyyy-MM-dd')
+                  if (date < today || unavailableDates.includes(dateStr)) return true
+                  const from = formData.dateRange.from
+                  if (from && !formData.dateRange.to) {
+                    const start = new Date(from)
+                    const end = new Date(date)
+                    start.setHours(0, 0, 0, 0)
+                    end.setHours(0, 0, 0, 0)
+                    const [a, b] = start <= end ? [start, end] : [end, start]
+                    for (let d = new Date(a); d <= b; d = addDays(d, 1)) {
+                      if (unavailableDates.includes(format(d, 'yyyy-MM-dd'))) return true
+                    }
+                  }
+                  return false
                 }}
               />
             </PopoverContent>
