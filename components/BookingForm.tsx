@@ -663,7 +663,7 @@ const BookingForm = ({
                 onMonthChange={setCalendarMonth}
                 selected={formData.dateRange}
                 onSelect={handleDateRangeChange}
-                numberOfMonths={2}
+                numberOfMonths={1}
                 locale={ru}
                 disabled={(date) => {
                   const today = new Date()
