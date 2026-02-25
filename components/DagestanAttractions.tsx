@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -82,7 +82,6 @@ const cardVariants: Variants = {
 
 const DagestanAttractions = () => {
   const [[page, direction], setPage] = useState<[number, number]>([0, 0]);
-  const [isHoveringNav, setIsHoveringNav] = useState<'left' | 'right' | null>(null); 
 
   const currentAttraction = attractionsData[page];
 
@@ -147,68 +146,87 @@ const DagestanAttractions = () => {
             <MapPin className="h-6 w-6 mr-2" />
             <span className="text-sm font-semibold uppercase tracking-wider">Откройте для себя</span>
           </motion.div>
-          <motion.h2 variants={itemVariants} className="text-4xl font-bold text-foreground mb-2">
+          <motion.h2 variants={itemVariants} className="text-3xl sm:text-4xl font-bold text-foreground mb-2">
             Куда поехать в Дагестане
           </motion.h2>
-          <motion.p variants={itemVariants} className="text-muted-foreground max-w-2xl">
+          <motion.p variants={itemVariants} className="text-muted-foreground max-w-2xl px-2 sm:px-0">
             Исследуйте невероятные красоты и уникальные места Дагестана на автомобилях BazCar.
           </motion.p>
         </div>
 
-        <div className="relative h-[500px] md:h-[600px] flex items-center justify-center">
-          <motion.div 
-            className="absolute left-0 md:left-8 top-1/2 -translate-y-1/2 z-20 cursor-pointer p-3 bg-card/80 backdrop-blur-sm rounded-full shadow-xl hover:bg-card transition-colors"
-            onMouseEnter={() => setIsHoveringNav("left")}
-            onMouseLeave={() => setIsHoveringNav(null)}
-            onClick={() => changePage(-1)}
-          >
-            <ChevronLeft className="h-6 w-6 md:h-8 md:w-8 text-primary" />
-          </motion.div>
+        <div className="relative flex flex-col items-center">
+          <div className="relative w-full flex justify-center">
+            <motion.div 
+              className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 z-20 cursor-pointer p-3 bg-card/80 backdrop-blur-sm rounded-full shadow-xl hover:bg-card transition-colors"
+              onClick={() => changePage(-1)}
+            >
+              <ChevronLeft className="h-6 w-6 md:h-8 md:w-8 text-primary" />
+            </motion.div>
 
-          <div className="w-[calc(100%-80px)] sm:w-[380px] md:w-[450px] aspect-[3/4] relative">
-            <AnimatePresence initial={false} custom={direction} mode="popLayout">
-              <motion.div
-                key={page}
-                custom={direction}
-                variants={cardVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                drag="x"
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.1}
-                onDragEnd={handleDragEnd}
-                className="absolute inset-0 bg-card rounded-xl shadow-2xl overflow-hidden border border-border/50 cursor-grab active:cursor-grabbing"
-              >
-                <div className="w-full h-3/5 md:h-2/3 overflow-hidden">
-                  <img  
-                    className="w-full h-full object-cover"
-                    alt={currentAttraction.name} 
-                    src={currentAttraction.src}
-                    draggable="false"
-                  />
-                </div>
-                <div className="p-5 md:p-6 flex flex-col justify-between flex-grow h-2/5 md:h-1/3">
-                  <div>
-                    <h3 className="text-xl md:text-2xl font-bold text-foreground mb-2 line-clamp-2">{currentAttraction.name}</h3>
-                    <p className="text-sm text-muted-foreground line-clamp-2 md:line-clamp-3">{currentAttraction.description}</p>
+            <div className="w-[calc(100%-2rem)] max-w-[360px] sm:max-w-[420px] md:max-w-[450px] relative overflow-hidden">
+              <AnimatePresence initial={false} custom={direction} mode="wait">
+                <motion.div
+                  key={page}
+                  custom={direction}
+                  variants={cardVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.1}
+                  onDragEnd={handleDragEnd}
+                  className="relative bg-card rounded-xl shadow-2xl overflow-hidden border border-border/50 cursor-grab active:cursor-grabbing"
+                >
+                  <div className="w-full aspect-[16/10] sm:aspect-[3/2] overflow-hidden">
+                    <img  
+                      className="w-full h-full object-cover"
+                      alt={currentAttraction.name} 
+                      src={currentAttraction.src}
+                      draggable="false"
+                    />
                   </div>
-                  <div className="mt-auto pt-2 text-xs text-primary font-semibold">
-                    {page + 1} / {attractionsData.length}
+                  <div className="p-4 sm:p-5 md:p-6">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground leading-snug">
+                      {currentAttraction.name}
+                    </h3>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {currentAttraction.description}
+                    </p>
+                    <div className="mt-3 text-xs text-primary font-semibold">
+                      {page + 1} / {attractionsData.length}
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <motion.div 
+              className="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 z-20 cursor-pointer p-3 bg-card/80 backdrop-blur-sm rounded-full shadow-xl hover:bg-card transition-colors"
+              onClick={() => changePage(1)}
+            >
+              <ChevronRight className="h-6 w-6 md:h-8 md:w-8 text-primary" />
+            </motion.div>
           </div>
 
-          <motion.div 
-            className="absolute right-0 md:right-8 top-1/2 -translate-y-1/2 z-20 cursor-pointer p-3 bg-card/80 backdrop-blur-sm rounded-full shadow-xl hover:bg-card transition-colors"
-            onMouseEnter={() => setIsHoveringNav("right")}
-            onMouseLeave={() => setIsHoveringNav(null)}
-            onClick={() => changePage(1)}
-          >
-            <ChevronRight className="h-6 w-6 md:h-8 md:w-8 text-primary" />
-          </motion.div>
+          <div className="mt-4 flex items-center gap-3 md:hidden">
+            <motion.button
+              type="button"
+              className="cursor-pointer p-2.5 bg-card/80 backdrop-blur-sm rounded-full shadow-xl hover:bg-card transition-colors"
+              onClick={() => changePage(-1)}
+              aria-label="Предыдущая локация"
+            >
+              <ChevronLeft className="h-5 w-5 text-primary" />
+            </motion.button>
+            <motion.button
+              type="button"
+              className="cursor-pointer p-2.5 bg-card/80 backdrop-blur-sm rounded-full shadow-xl hover:bg-card transition-colors"
+              onClick={() => changePage(1)}
+              aria-label="Следующая локация"
+            >
+              <ChevronRight className="h-5 w-5 text-primary" />
+            </motion.button>
+          </div>
         </div>
       </div>
     </motion.section>
