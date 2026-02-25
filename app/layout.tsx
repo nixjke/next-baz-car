@@ -6,6 +6,11 @@ import { PhoneClickTracker } from '@/components/PhoneClickTracker'
 
 export const metadata: Metadata = {
 	metadataBase: new URL('https://baz-car.ru'),
+	icons: {
+		icon: '/logo.png',
+		shortcut: '/logo.png',
+		apple: '/logo.png',
+	},
 	title: {
 		default: 'BazCar — Аренда премиальных автомобилей в Дагестане',
 		template: '%s | BazCar',
