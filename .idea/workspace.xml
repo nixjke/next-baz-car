@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="795c4181-e082-4033-98db-a577df2cbe4e" name="Changes" comment="update api">
+    <list default="true" id="795c4181-e082-4033-98db-a577df2cbe4e" name="Changes" comment="update log">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/DressCodeInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/DressCodeInfo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/CarCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/CarCard.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,6 +88,16 @@
       <workItem from="1764499218969" duration="58000" />
       <workItem from="1764709357926" duration="3215000" />
       <workItem from="1766861406379" duration="1340000" />
+      <workItem from="1768146318831" duration="1351000" />
+      <workItem from="1768169893716" duration="585000" />
+      <workItem from="1768216023427" duration="2376000" />
+      <workItem from="1768510850171" duration="1818000" />
+      <workItem from="1768823286164" duration="5000" />
+      <workItem from="1769468425676" duration="394000" />
+      <workItem from="1769603046079" duration="5000" />
+      <workItem from="1769652512515" duration="121000" />
+      <workItem from="1769859993138" duration="1465000" />
+      <workItem from="1769951671099" duration="14000" />
     </task>
     <task id="LOCAL-00001" summary="update car">
       <option name="closed" value="true" />
@@ -113,7 +123,23 @@
       <option name="project" value="LOCAL" />
       <updated>1766862740950</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="update text">
+      <option name="closed" value="true" />
+      <created>1767903767801</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1767903767801</updated>
+    </task>
+    <task id="LOCAL-00005" summary="update log">
+      <option name="closed" value="true" />
+      <created>1767903931010</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1767903931010</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -145,6 +171,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="update car" />
     <MESSAGE value="update api" />
-    <option name="LAST_COMMIT_MESSAGE" value="update api" />
+    <MESSAGE value="update text" />
+    <MESSAGE value="update log" />
+    <option name="LAST_COMMIT_MESSAGE" value="update log" />
   </component>
 </project>

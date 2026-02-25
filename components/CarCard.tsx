@@ -1,7 +1,9 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { format } from 'date-fns'
+import { getUnavailableDates } from '@/services/availabilityService'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -172,11 +174,15 @@ const CarCardFooterActions = ({
 	onQuickBook,
 	onAddToCart,
 	showAddToCart,
+	unavailableDates = [],
+	loadingDates = false,
 }: {
 	car: Car
 	onQuickBook: (e: React.MouseEvent) => void
 	onAddToCart: (e: React.MouseEvent) => void
 	showAddToCart: boolean
+	unavailableDates?: string[]
+	loadingDates?: boolean
 }) => {
   const displayPrice = car?.price || car?.price_3plus_days || 0;
   return (
@@ -219,6 +225,18 @@ const CarCardFooterActions = ({
 const CarCard = ({ car }: { car: Car }) => {
 	const router = useRouter()
 	const carSlug = generateCarSlug(car)
+	const [unavailableDates, setUnavailableDates] = useState<string[]>([])
+	const [loadingDates, setLoadingDates] = useState(true)
+
+	useEffect(() => {
+		const monthStr = format(new Date(), 'yyyy-MM')
+		getUnavailableDates(car.id, monthStr)
+			.then((dates) => {
+				setUnavailableDates(dates)
+			})
+			.catch(() => setUnavailableDates([]))
+			.finally(() => setLoadingDates(false))
+	}, [car.id])
   
 	const handleQuickBook = (e: React.MouseEvent) => {
 		e.preventDefault()
@@ -262,7 +280,14 @@ const CarCard = ({ car }: { car: Car }) => {
 				<CarCardImage car={car} />
 				<CarCardHeaderContent car={car} />
 				<CarCardMainContent car={car} />
-				<CarCardFooterActions car={car} onQuickBook={handleQuickBook} onAddToCart={handleAddToCart} showAddToCart={USE_CART} />
+				<CarCardFooterActions 
+					car={car} 
+					onQuickBook={handleQuickBook} 
+					onAddToCart={handleAddToCart} 
+					showAddToCart={USE_CART}
+					unavailableDates={unavailableDates}
+					loadingDates={loadingDates}
+				/>
 			</Card>
 		</motion.div>
 	)
