@@ -568,6 +568,9 @@ const BookingForm = ({
 	const handleWhatsAppSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 		if (!validateForm()) return
+		reachGoal('whatsapp_checkout_click', {
+			car: car.name,
+		})
 
 		setIsSubmitting(true)
 		try {
