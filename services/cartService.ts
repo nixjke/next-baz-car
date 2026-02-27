@@ -18,10 +18,10 @@ export type CartBookingRequest = {
 }
 
 export type CartBookingResponse = {
-	total_price: number
 	whatsapp_link: string
-	items_count: number
-	breakdown: {
+	total_price?: number
+	items_count?: number
+	breakdown?: {
 		subtotal: number
 		discount_amount: number
 		discount_percent: number

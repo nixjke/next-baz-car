@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useCallback, useMemo, useEffect } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -38,7 +38,6 @@ import {
 import { getCarServices, type AdditionalService } from '@/services/carService'
 import { useCart } from '@/context/CartContext'
 import { deliveryOptionsData } from '@/config/bookingOptions'
-import { useRouter } from 'next/navigation'
 import { type Car } from '@/data/mockCars'
 import { USE_CART } from '@/config/featureFlags'
 import { createCartBooking } from '@/services/cartService'
@@ -220,8 +219,6 @@ type AdditionalServiceCheckboxProps = {
 	checked: boolean
 	onCheckedChange: (checked: boolean) => void
 	label: string
-	fee: number
-	feeType?: string
 	icon: IconKey
 	carId: number
 }
@@ -231,8 +228,6 @@ const AdditionalServiceCheckbox = ({
 	checked,
 	onCheckedChange,
 	label,
-	fee,
-	feeType = 'fixed',
 	icon: IconKey,
 	carId,
 }: AdditionalServiceCheckboxProps) => {
@@ -252,87 +247,8 @@ const AdditionalServiceCheckbox = ({
       <Label htmlFor={id} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center">
         {IconComponent && <IconComponent className="h-4 w-4 mr-1.5 text-primary/80" />}
         {label}
-        <span className="text-primary font-semibold ml-1">
-          (+{fee.toLocaleString('ru-RU')} ₽{feeType === "daily" ? "/день" : ""})
-        </span>
       </Label>
     </div>
-  );
-};
-
-type PriceDetailsProps = {
-	rentalDays: number
-	dailyPrice: number
-	deliveryOptionId: string
-	additionalServicesSelected: Record<string, boolean>
-	services: AdditionalService[]
-}
-
-const PriceDetails = ({
-	rentalDays,
-	dailyPrice,
-	deliveryOptionId,
-	additionalServicesSelected,
-	services,
-}: PriceDetailsProps) => {
-	const deliveryCost = 0 // Будет загружаться из API
-	const rentalCost = dailyPrice * rentalDays
-
-	let additionalServicesCostTotal = 0
-	// Подсчитываем стоимость выбранных дополнительных услуг
-	services.forEach((service) => {
-		if (additionalServicesSelected[service.service_id]) {
-			if (service.fee_type === 'daily') {
-				additionalServicesCostTotal += service.fee * rentalDays
-			} else {
-				additionalServicesCostTotal += service.fee
-			}
-		}
-	})
-
-	const totalAmount = rentalCost + deliveryCost + additionalServicesCostTotal
-
-  return (
-    <>
-      <div className="space-y-1 mb-4">
-        <div className="flex justify-between items-center">
-          <span className="text-sm font-medium text-muted-foreground">Аренда ({rentalDays} дн. x {dailyPrice.toLocaleString('ru-RU')} ₽):</span>
-          <span className="font-semibold text-foreground">{rentalCost.toLocaleString('ru-RU')} ₽</span>
-        </div>
-        {rentalDays >= 3 && (
-          <div className="flex justify-start items-center text-xs text-green-600">
-            <Tag className="h-3 w-3 mr-1"/><span>Применена скидка за аренду от 3-х дней</span>
-          </div>
-        )}
-        {deliveryCost > 0 && (
-          <div className="flex justify-between items-center text-sm">
-            <span className="text-muted-foreground">Доставка:</span>
-            <span className="text-foreground">+{deliveryCost.toLocaleString('ru-RU')} ₽</span>
-          </div>
-        )}
-        {services.map((service) => {
-          if (additionalServicesSelected[service.service_id]) {
-            const serviceCost = service.fee_type === 'daily' ? service.fee * rentalDays : service.fee
-            return (
-              <div key={service.id} className="flex justify-between items-center text-sm">
-                <span className="text-muted-foreground">{service.label}:</span>
-                <span className="text-foreground">+{serviceCost.toLocaleString('ru-RU')} ₽</span>
-              </div>
-            )
-          }
-          return null
-        })}
-      </div>
-
-      {totalAmount > 0 && (
-        <div className="flex justify-between items-center mb-4 border-t border-dashed border-border/50 pt-3">
-          <span className="text-md font-medium text-foreground flex items-center">
-            <CreditCard className="h-5 w-5 mr-2 text-primary" />Итого за позицию:
-          </span>
-          <span className="text-xl font-bold text-primary">{totalAmount.toLocaleString('ru-RU')} ₽</span>
-        </div>
-      )}
-    </>
   );
 };
 
@@ -349,7 +265,6 @@ const BookingForm = ({
 }: BookingFormProps) => {
 	const { toast } = useToast()
 	const { addToCart } = useCart()
-	const router = useRouter()
 	const [formData, setFormData] = useState<FormData>(initialFormData)
 	const [additionalServices, setAdditionalServices] = useState<AdditionalService[]>([])
 	const [loadingServices, setLoadingServices] = useState(true)
@@ -432,47 +347,6 @@ const BookingForm = ({
 			}))
 		}
 	}
-
-  const calculateCurrentItemTotal = useCallback(() => {
-    let total = 0;
-    let rentalDays = 0;
-    let currentDailyPrice = price;
-
-		if (formData.dateRange.from && formData.dateRange.to) {
-			const diffTime = Math.abs(
-				formData.dateRange.to.getTime() - formData.dateRange.from.getTime()
-			)
-			rentalDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-      if (rentalDays === 0 && diffTime > 0) rentalDays = 1;
-
-      if (rentalDays >= 3 && price3PlusDays) {
-        currentDailyPrice = price3PlusDays;
-      } else if (rentalDays > 0) {
-        currentDailyPrice = price;
-      }
-    }
-
-    // Подсчитываем стоимость выбранных дополнительных услуг
-    additionalServices.forEach((service) => {
-      if ((formData as any)[service.service_id]) {
-        if (service.fee_type === 'daily') {
-          total += service.fee * rentalDays
-        } else {
-          total += service.fee
-        }
-      }
-    })
-
-    // Доставка будет загружаться из API (пока 0)
-    const deliveryCost = 0
-    const rentalCost = currentDailyPrice * rentalDays
-    total = rentalCost + deliveryCost + total
-
-    return { totalAmount: total, days: rentalDays, dailyPrice: currentDailyPrice };
-  }, [formData, price, price3PlusDays, additionalServices]);
-
-  const { totalAmount: currentItemTotal, days: rentalDays, dailyPrice } = useMemo(() => calculateCurrentItemTotal(), [calculateCurrentItemTotal]);
-
 
   const validateForm = useCallback(() => {
     if (!formData.dateRange.from || !formData.dateRange.to || !formData.name || !formData.phone) {
@@ -559,11 +433,8 @@ const BookingForm = ({
 			personalDriver: formData.personalDriver || (formData as any)['personalDriver'] || false,
 			ps5: formData.ps5 || (formData as any)['ps5'] || false,
 			transmission: formData.transmission || (formData as any)['transmission'] || false,
-			rentalDays,
-			dailyPrice,
-			totalPrice: currentItemTotal,
 		}
-	}, [car, formData, rentalDays, dailyPrice, currentItemTotal])
+	}, [car, formData])
 
 	const handleWhatsAppSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -764,8 +635,6 @@ const BookingForm = ({
                     handleCheckboxChange(service.service_id, checked)
                   }
                   label={service.label}
-                  fee={service.fee}
-                  feeType={service.fee_type}
                   icon={iconName}
                   carId={car.id}
                 />
@@ -775,16 +644,6 @@ const BookingForm = ({
         </div>
 
         <div className="pt-5 border-t border-border/50">
-          {rentalDays > 0 && (
-            <PriceDetails
-              rentalDays={rentalDays}
-              dailyPrice={dailyPrice}
-              deliveryOptionId={formData.deliveryOption}
-              additionalServicesSelected={formData}
-              services={additionalServices}
-            />
-          )}
-
           <Button
             type="submit"
             disabled={!USE_CART && isSubmitting}
