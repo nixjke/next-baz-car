@@ -1,6 +1,20 @@
 import axiosInstance from '@/utils/axios'
 import { API_CONFIG } from '@/utils/constants'
-import { type CartItem } from '@/context/CartContext'
+
+type CartBookingItem = {
+	car: { id: number }
+	pickupDate: string
+	returnDate: string
+	deliveryOption: { id: string }
+	youngDriver?: boolean
+	childSeat?: boolean
+	personalDriver?: boolean
+	ps5?: boolean
+	transmission?: boolean
+	name?: string
+	phone?: string
+	email?: string
+}
 
 export type CartBookingRequest = {
 	items: Array<{
@@ -45,7 +59,7 @@ const SERVICE_ID_MAP: Record<string, string> = {
 /**
  * Преобразует CartItem в формат для API
  */
-const cartItemToApiFormat = (item: CartItem) => {
+const cartItemToApiFormat = (item: CartBookingItem) => {
 	const additionalServiceIds: string[] = []
 
 	if (item.youngDriver) additionalServiceIds.push('youngDriver')
@@ -67,7 +81,7 @@ const cartItemToApiFormat = (item: CartItem) => {
  * Создаёт заказ из корзины и получает WhatsApp ссылку
  */
 export const createCartBooking = async (
-	cartItems: CartItem[],
+	cartItems: CartBookingItem[],
 	customerInfo: {
 		name: string
 		phone: string
@@ -84,8 +98,8 @@ export const createCartBooking = async (
 
 	// Используем контактную информацию из первой позиции, если не указана отдельно
 	const finalCustomerInfo = {
-		name: customerInfo.name || cartItems[0].name,
-		phone: customerInfo.phone || cartItems[0].phone,
+		name: customerInfo.name || cartItems[0].name || '',
+		phone: customerInfo.phone || cartItems[0].phone || '',
 		email: customerInfo.email || cartItems[0].email,
 	}
 
