@@ -52,9 +52,16 @@ export function CartItemCard({ item, onRemove }: CartItemCardProps) {
 							<p>
 								<strong>Даты:</strong> {item.pickupDate} - {item.returnDate} ({item.rentalDays} дн.)
 							</p>
-							<p>
-								<strong>Цена за день:</strong> {item.dailyPrice.toLocaleString('ru-RU')} ₽
-							</p>
+							<div className="flex items-end gap-2">
+								<p>
+									<strong>Цена за день:</strong> {item.dailyPrice.toLocaleString('ru-RU')} ₽
+								</p>
+								{item.car.old_price && item.car.old_price > 0 && item.car.old_price !== item.dailyPrice && (
+									<span className="text-xs text-muted-foreground/80 line-through whitespace-nowrap pb-0.5">
+										{item.car.old_price.toLocaleString('ru-RU')} ₽
+									</span>
+								)}
+							</div>
 							{item.rentalDays >= 3 && (
 								<p className="text-green-600 text-xs flex items-center">
 									<Tag className="inline h-3 w-3 mr-1" />

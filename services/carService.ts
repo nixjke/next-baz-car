@@ -64,6 +64,7 @@ const transformCar = (apiCar: any): Car => {
 		name: apiCar.name,
 		category: apiCar.category,
 		price: apiCar.price || 0,
+		old_price: apiCar.old_price,
 		price_3plus_days: apiCar.price_3plus_days,
 		images: apiCar.images?.map((img: string) => getImageUrl(img)) || [],
 		description: apiCar.description,

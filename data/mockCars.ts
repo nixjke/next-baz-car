@@ -3,6 +3,7 @@ export type Car = {
 	name: string
 	category?: string
 	price: number
+	old_price?: number
 	price_3plus_days?: number
 	images?: string[]
 	description?: string

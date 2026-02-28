@@ -206,9 +206,14 @@ export default function CarDetailPageClient({ slug }: CarDetailPageClientProps) 
 					</motion.div>
 
 					<motion.div variants={itemVariants(2)} className="mt-4 md:mt-0 text-right">
-						<div>
+						<div className="flex items-end justify-end gap-2 sm:gap-3">
 							<span className="text-2xl font-bold text-primary">{(car.price || 0).toLocaleString('ru-RU')} ₽</span>
 							<span className="text-muted-foreground text-sm">/день (1-2 дня)</span>
+							{car.old_price && car.old_price > 0 && car.old_price !== (car.price || 0) && (
+								<span className="text-muted-foreground/80 text-xs sm:text-sm line-through whitespace-nowrap pb-0.5">
+									{car.old_price.toLocaleString('ru-RU')} ₽
+								</span>
+							)}
 						</div>
 						{car.price_3plus_days && (
 							<div className="mt-1">

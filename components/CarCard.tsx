@@ -42,6 +42,7 @@ type Car = {
 	name: string
 	description?: string
 	price: number
+	old_price?: number
 	price_3plus_days?: number
 	rating?: number
 	fuel_type?: string
@@ -185,15 +186,25 @@ const CarCardFooterActions = ({
 	loadingDates?: boolean
 }) => {
   const displayPrice = car?.price || car?.price_3plus_days || 0;
+  const hasOldPrice = Boolean(car?.old_price && car.old_price > 0 && car.old_price !== displayPrice);
   return (
     <CardFooter className="p-3 sm:p-4 border-t border-border/50 flex flex-col items-stretch space-y-2 sm:space-y-3 bg-secondary/40">
-      <div className="flex justify-between items-center">
-        <div>
-          <span className="text-muted-foreground text-xxs sm:text-xs">От </span>
-          <span className="text-lg sm:text-2xl font-bold text-primary">{displayPrice.toLocaleString('ru-RU')} ₽</span>
-          <span className="text-muted-foreground text-xxs sm:text-xs">/день</span>
+      <div className="flex justify-between items-center gap-2 sm:gap-3">
+        <div className="min-w-0 flex-shrink">
+          <div className="flex items-end gap-1 sm:gap-2 leading-none">
+            <span className="text-muted-foreground text-xxs sm:text-xs pb-0.5">От</span>
+            <span className="text-lg sm:text-xl font-bold text-primary whitespace-nowrap">
+              {displayPrice.toLocaleString('ru-RU')} ₽
+            </span>
+            <span className="text-muted-foreground text-xxs sm:text-xs pb-0.5 whitespace-nowrap">/день</span>
+          </div>
+          {hasOldPrice && (
+            <div className="mt-1 text-[13px] sm:text-[20px] text-orange-400/90 line-through whitespace-nowrap">
+              {car.old_price?.toLocaleString('ru-RU')} ₽
+            </div>
+          )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 shrink-0">
           {showAddToCart && (
             <Button 
               variant="outline" 
