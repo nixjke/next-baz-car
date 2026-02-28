@@ -3,12 +3,10 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { type Car } from '@/data/mockCars'
-import { serviceFees, additionalServicesConfig, deliveryOptionsData } from '@/config/bookingOptions'
 
 export type DeliveryOption = {
 	id: string
 	label: string
-	price: number
 }
 
 export type CartItem = {
@@ -25,84 +23,19 @@ export type CartItem = {
 	name: string
 	phone: string
 	email?: string
-	rentalDays: number
-	dailyPrice: number
-	totalPrice: number
 }
 
 type CartContextType = {
 	cartItems: CartItem[]
-	addToCart: (item: Omit<CartItem, 'id' | 'totalPrice' | 'rentalDays' | 'dailyPrice'>) => void
+	addToCart: (item: Omit<CartItem, 'id'>) => void
 	removeFromCart: (itemId: string) => void
 	updateCartItem: (itemId: string, updates: Partial<CartItem>) => void
 	clearCart: () => void
-	getCartTotal: () => number
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
 
 const STORAGE_KEY = 'bazcar_cart'
-
-// Функция расчёта цены позиции (как в baz-car)
-const calculateItemPrice = (item: Omit<CartItem, 'id' | 'totalPrice' | 'rentalDays' | 'dailyPrice'>): {
-	totalPrice: number
-	rentalDays: number
-	dailyPrice: number
-} => {
-	if (!item.car || typeof item.car.price === 'undefined') {
-		return { totalPrice: 0, rentalDays: 0, dailyPrice: 0 }
-	}
-
-	let rentalDays = 0
-	let currentDailyPrice = item.car.price
-
-	if (item.pickupDate && item.returnDate) {
-		const pickup = new Date(item.pickupDate)
-		const ret = new Date(item.returnDate)
-		if (ret > pickup) {
-			const diffTime = Math.abs(ret.getTime() - pickup.getTime())
-			rentalDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-			if (rentalDays === 0 && diffTime > 0) rentalDays = 1
-
-			if (rentalDays >= 3 && item.car.price_3plus_days) {
-				currentDailyPrice = item.car.price_3plus_days
-			} else if (rentalDays > 0) {
-				currentDailyPrice = item.car.price
-			}
-		}
-	}
-
-	const rentalCost = currentDailyPrice * rentalDays
-	const deliveryCost = item.deliveryOption?.price || 0
-
-	let additionalServicesCost = 0
-
-	// Молодой водитель
-	if (item.youngDriver && serviceFees.youngDriver) {
-		additionalServicesCost += serviceFees.youngDriver
-	}
-
-	// Остальные услуги
-	additionalServicesConfig.forEach(service => {
-		// PS5 только для Li L7 (car.id === 3)
-		if (service.id === 'ps5' && item.car.id !== 3) {
-			return
-		}
-
-		if (item[service.id as keyof typeof item]) {
-			const serviceCost = service.feeType === 'daily' ? service.fee * rentalDays : service.fee
-			additionalServicesCost += serviceCost
-		}
-	})
-
-	const totalPrice = rentalCost + deliveryCost + additionalServicesCost
-
-	return {
-		totalPrice,
-		rentalDays,
-		dailyPrice: currentDailyPrice,
-	}
-}
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
 	const [cartItems, setCartItems] = useState<CartItem[]>([])
@@ -135,7 +68,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 		}
 	}, [cartItems, mounted])
 
-	const addToCart = useCallback((item: Omit<CartItem, 'id' | 'totalPrice' | 'rentalDays' | 'dailyPrice'>) => {
+	const addToCart = useCallback((item: Omit<CartItem, 'id'>) => {
 		// Валидация
 		if (!item.name || !item.phone || !item.pickupDate || !item.returnDate) {
 			setTimeout(() => {
@@ -173,14 +106,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 				return prevItems
 			}
 
-			const { totalPrice, rentalDays, dailyPrice } = calculateItemPrice(item)
-
 			const newItem: CartItem = {
 				...item,
 				id: Date.now().toString(),
-				totalPrice,
-				rentalDays,
-				dailyPrice,
 			}
 
 			setTimeout(() => {
@@ -208,10 +136,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 		setCartItems(prevItems =>
 			prevItems.map(item => {
 				if (item.id === itemId) {
-					const updatedItem = { ...item, ...updates }
-					// Пересчитываем цену при обновлении
-					const { totalPrice, rentalDays, dailyPrice } = calculateItemPrice(updatedItem)
-					return { ...updatedItem, totalPrice, rentalDays, dailyPrice }
+					return { ...item, ...updates }
 				}
 				return item
 			})
@@ -234,17 +159,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 		}, 0)
 	}, [toast])
 
-	const getCartTotal = useCallback(() => {
-		return cartItems.reduce((total, item) => total + item.totalPrice, 0)
-	}, [cartItems])
-
 	const value: CartContextType = {
 		cartItems,
 		addToCart,
 		removeFromCart,
 		updateCartItem,
 		clearCart,
-		getCartTotal,
 	}
 
 	return <CartContext.Provider value={value}>{children}</CartContext.Provider>

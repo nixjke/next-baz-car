@@ -4,7 +4,6 @@ export type Car = {
 	category?: string
 	price: number
 	old_price?: number
-	price_3plus_days?: number
 	images?: string[]
 	description?: string
 	features?: string[]
@@ -37,7 +36,6 @@ export const mockCars: Car[] = [
 		name: 'LiXiang L6 Pro (Cлоновья кость)',
 		category: 'Premium Electric',
 		price: 15900,
-		price_3plus_days: 14300,
 		images: [
 			'/li6-white/13G08602.webp',
 			'/li6-white/13G08521.webp',
@@ -73,7 +71,6 @@ export const mockCars: Car[] = [
 		name: 'LiXiang L7',
 		category: 'Luxury SUV',
 		price: 17900,
-		price_3plus_days: 16110,
 		images: [
 			'/li7-black/13G08240.webp',
 			'/li7-black/13G07765.webp',
@@ -109,7 +106,6 @@ export const mockCars: Car[] = [
 		name: 'Toyota Land Cruiser 200 (Черный)',
 		category: 'Luxury SUV',
 		price: 12500,
-		price_3plus_days: 11250,
 		images: [
 			'/land-cruiser-200/13G07972.webp',
 			'/land-cruiser-200/13G08009.webp',
@@ -147,7 +143,6 @@ export const mockCars: Car[] = [
 		name: 'Geely Monjaro',
 		category: 'Hybrid SUV',
 		price: 8500,
-		price_3plus_days: 7650,
 		images: [
 			'/geely-monjaro/13G08098.webp',
 			'/geely-monjaro/13G08114.webp',
@@ -181,7 +176,6 @@ export const mockCars: Car[] = [
 		name: 'Lexus IS F',
 		category: 'Premium Sedan',
 		price: 23000,
-		price_3plus_days: 20700,
 		images: [
 			'/lexus-is-f/13G08882.webp',
 			'/lexus-is-f/13G08862.webp',
@@ -225,7 +219,6 @@ export const mockCars: Car[] = [
 		name: 'Li L6 (Серая)',
 		category: 'Premium Electric',
 		price: 15900,
-		price_3plus_days: 14310,
 		images: [
 			'/li-6-gray/imhcwng5asti2dh10wtn.webp',
 			'/li-6-gray/d6g5obv5ruuomyfnxpoa.webp',
@@ -265,7 +258,6 @@ export const mockCars: Car[] = [
 		name: 'Lexus 570',
 		category: 'Luxury SUV',
 		price: 11000,
-		price_3plus_days: 9900,
 		images: [
 			'/lexus-570/curhh7impfkenfbnsp0y.webp',
 			'/lexus-570/da81uiarnrmxxtcmsr0t.webp',

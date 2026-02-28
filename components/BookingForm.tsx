@@ -168,7 +168,6 @@ const FormInputGroup = ({
 type DeliveryOption = {
 	id: string
 	label: string
-	price: number
 	iconKey: IconKey
 }
 
@@ -204,9 +203,6 @@ const DeliveryOptionsGroup = ({
             <RadioGroupItem value={option.id} id={`delivery-${option.id}`} className="sr-only" />
             {IconComponent && <IconComponent className={`h-5 w-5 mb-1.5 ${value === option.id ? "text-primary" : "text-muted-foreground"}`} />}
             <span className="text-xs font-medium">{option.label}</span>
-            <span className={`text-xxs ${value === option.id ? "text-primary" : "text-muted-foreground"}`}>
-              {option.price > 0 ? `+${option.price.toLocaleString('ru-RU')} ₽` : "Бесплатно"}
-            </span>
           </Label>
         );
       })}
@@ -254,14 +250,10 @@ const AdditionalServiceCheckbox = ({
 
 type BookingFormProps = {
 	car: Car
-	price: number
-	price3PlusDays?: number
 }
 
 const BookingForm = ({
 	car,
-	price,
-	price3PlusDays,
 }: BookingFormProps) => {
 	const { toast } = useToast()
 	const { addToCart } = useCart()
@@ -390,7 +382,6 @@ const BookingForm = ({
 			deliveryOption: {
 				id: selectedDeliveryOption.id,
 				label: selectedDeliveryOption.label,
-				price: selectedDeliveryOption.price,
 			},
 			// Используем значения из formData, которые могут быть установлены через service_id
 			youngDriver: formData.youngDriver || (formData as any)['youngDriver'] || false,
@@ -426,7 +417,6 @@ const BookingForm = ({
 			deliveryOption: {
 				id: selectedDeliveryOption.id,
 				label: selectedDeliveryOption.label,
-				price: selectedDeliveryOption.price,
 			},
 			youngDriver: formData.youngDriver || (formData as any)['youngDriver'] || false,
 			childSeat: formData.childSeat || (formData as any)['childSeat'] || false,

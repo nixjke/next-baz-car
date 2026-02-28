@@ -43,7 +43,6 @@ type Car = {
 	description?: string
 	price: number
 	old_price?: number
-	price_3plus_days?: number
 	rating?: number
 	fuel_type?: string
 	fuelType?: string
@@ -185,7 +184,7 @@ const CarCardFooterActions = ({
 	unavailableDates?: string[]
 	loadingDates?: boolean
 }) => {
-  const displayPrice = car?.price || car?.price_3plus_days || 0;
+  const displayPrice = car?.price || 0;
   const hasOldPrice = Boolean(car?.old_price && car.old_price > 0 && car.old_price !== displayPrice);
   return (
     <CardFooter className="p-3 sm:p-4 border-t border-border/50 flex flex-col items-stretch space-y-2 sm:space-y-3 bg-secondary/40">

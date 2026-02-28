@@ -8,7 +8,6 @@ import { getCarById } from '@/services/carService'
 import { type Car } from '@/data/mockCars'
 import { parseCarIdFromSlug } from '@/utils/carSlug'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import BookingForm from '@/components/BookingForm'
 import { ImageCarousel } from '@/components/ImageCarousel'
 import AdditionalServicesSection from '@/components/AdditionalServicesSection'
@@ -23,7 +22,6 @@ import {
 	ArrowLeft,
 	Star,
 	CheckCircle,
-	Tag,
 	UserCheck,
 	Mountain,
 	CreditCard,
@@ -208,25 +206,13 @@ export default function CarDetailPageClient({ slug }: CarDetailPageClientProps) 
 					<motion.div variants={itemVariants(2)} className="mt-4 md:mt-0 text-right">
 						<div className="flex items-end justify-end gap-2 sm:gap-3">
 							<span className="text-2xl font-bold text-primary">{(car.price || 0).toLocaleString('ru-RU')} ₽</span>
-							<span className="text-muted-foreground text-sm">/день (1-2 дня)</span>
+							<span className="text-muted-foreground text-sm">/день</span>
 							{car.old_price && car.old_price > 0 && car.old_price !== (car.price || 0) && (
 								<span className="text-muted-foreground/80 text-xs sm:text-sm line-through whitespace-nowrap pb-0.5">
 									{car.old_price.toLocaleString('ru-RU')} ₽
 								</span>
 							)}
 						</div>
-						{car.price_3plus_days && (
-							<div className="mt-1">
-								<span className="text-2xl font-bold text-green-500">{(car.price_3plus_days || 0).toLocaleString('ru-RU')} ₽</span>
-								<span className="text-muted-foreground text-sm">/день (от 3 дней)</span>
-								<Badge
-									variant="outline"
-									className="ml-2 text-xs px-2 py-0.5 shadow-sm bg-green-100 text-green-700 border-green-300"
-								>
-									<Tag className="h-3 w-3 mr-1" /> Выгодно
-								</Badge>
-							</div>
-						)}
 					</motion.div>
 				</div>
 
@@ -415,11 +401,7 @@ export default function CarDetailPageClient({ slug }: CarDetailPageClientProps) 
 					</div>
 
 					<motion.div id="booking-form-section" className="lg:col-span-1 sticky top-24" variants={itemVariants(7)}>
-						<BookingForm
-							car={car}
-							price={car.price || 0}
-							price3PlusDays={car.price_3plus_days || 0}
-						/>
+						<BookingForm car={car} />
 					</motion.div>
 				</div>
 			</div>

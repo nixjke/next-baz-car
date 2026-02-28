@@ -2,9 +2,8 @@
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Trash2, Edit3, Baby, UserCheck, User, Gamepad2, Settings, Tag } from 'lucide-react'
+import { Trash2, Edit3, Baby, UserCheck, User, Gamepad2, Settings } from 'lucide-react'
 import { type CartItem } from '@/context/CartContext'
-import { serviceFees } from '@/config/bookingOptions'
 import { getServerBaseUrl } from '@/utils/constants'
 import Link from 'next/link'
 
@@ -50,30 +49,21 @@ export function CartItemCard({ item, onRemove }: CartItemCardProps) {
 					<div className="flex-1 space-y-2 text-sm">
 						<div>
 							<p>
-								<strong>Даты:</strong> {item.pickupDate} - {item.returnDate} ({item.rentalDays} дн.)
+								<strong>Даты:</strong> {item.pickupDate} - {item.returnDate}
 							</p>
 							<div className="flex items-end gap-2">
 								<p>
-									<strong>Цена за день:</strong> {item.dailyPrice.toLocaleString('ru-RU')} ₽
+									<strong>Цена за день:</strong> {item.car.price.toLocaleString('ru-RU')} ₽
 								</p>
-								{item.car.old_price && item.car.old_price > 0 && item.car.old_price !== item.dailyPrice && (
+								{item.car.old_price && item.car.old_price > 0 && item.car.old_price !== item.car.price && (
 									<span className="text-xs text-muted-foreground/80 line-through whitespace-nowrap pb-0.5">
 										{item.car.old_price.toLocaleString('ru-RU')} ₽
 									</span>
 								)}
 							</div>
-							{item.rentalDays >= 3 && (
-								<p className="text-green-600 text-xs flex items-center">
-									<Tag className="inline h-3 w-3 mr-1" />
-									Скидка за длит. аренду
-								</p>
-							)}
 						</div>
 						<div>
-							<p>
-								<strong>Доставка:</strong> {item.deliveryOption.label}{' '}
-								({item.deliveryOption.price > 0 ? `+${item.deliveryOption.price.toLocaleString('ru-RU')} ₽` : 'Бесплатно'})
-							</p>
+							<p><strong>Доставка:</strong> {item.deliveryOption.label}</p>
 						</div>
 						{(item.childSeat || item.personalDriver || item.ps5 || item.transmission || item.youngDriver) && (
 							<div className="pt-2 border-t">
@@ -82,31 +72,31 @@ export function CartItemCard({ item, onRemove }: CartItemCardProps) {
 									{item.youngDriver && (
 										<li className="flex items-center text-muted-foreground">
 											<User className="h-3.5 w-3.5 mr-1.5 text-primary/80" />
-											Молодой водитель (+{serviceFees.youngDriver.toLocaleString('ru-RU')} ₽)
+											Молодой водитель
 										</li>
 									)}
 									{item.childSeat && (
 										<li className="flex items-center text-muted-foreground">
 											<Baby className="h-3.5 w-3.5 mr-1.5 text-primary/80" />
-											Детское кресло (+{serviceFees.childSeat.toLocaleString('ru-RU')} ₽)
+											Детское кресло
 										</li>
 									)}
 									{item.personalDriver && (
 										<li className="flex items-center text-muted-foreground">
 											<UserCheck className="h-3.5 w-3.5 mr-1.5 text-primary/80" />
-											Личный водитель (+{serviceFees.personalDriver.toLocaleString('ru-RU')} ₽)
+											Личный водитель
 										</li>
 									)}
 									{item.ps5 && (
 										<li className="flex items-center text-muted-foreground">
 											<Gamepad2 className="h-3.5 w-3.5 mr-1.5 text-primary/80" />
-											PlayStation 5 (+{serviceFees.ps5.toLocaleString('ru-RU')} ₽)
+											PlayStation 5
 										</li>
 									)}
 									{item.transmission && (
 										<li className="flex items-center text-muted-foreground">
 											<Settings className="h-3.5 w-3.5 mr-1.5 text-primary/80" />
-											Передача руля (+{serviceFees.transmission.toLocaleString('ru-RU')} ₽)
+											Передача руля
 										</li>
 									)}
 								</ul>
@@ -115,16 +105,13 @@ export function CartItemCard({ item, onRemove }: CartItemCardProps) {
 					</div>
 				</div>
 			</CardContent>
-			<CardFooter className="p-5 bg-secondary/30 flex justify-between items-center">
+			<CardFooter className="p-5 bg-secondary/30 flex justify-end items-center">
 				<Link
 					href={`/cars/${item.car.id}?edit=${item.id}`}
 					className="text-xs text-primary hover:underline flex items-center"
 				>
 					<Edit3 className="h-3.5 w-3.5 mr-1.5" /> Изменить параметры
 				</Link>
-				<p className="text-lg font-semibold text-primary">
-					Итого: {item.totalPrice.toLocaleString('ru-RU')} ₽
-				</p>
 			</CardFooter>
 		</Card>
 	)

@@ -38,10 +38,6 @@ const getServiceStylesById = (serviceId: number) => {
 const ServiceCard = ({ service }: { service: AdditionalService }) => {
 	// Используем ID услуги для маппинга иконки
 	const IconComponent = iconsMapById[service.id] || Settings
-	const displayPrice =
-		service.fee_type === 'daily'
-			? `${service.fee.toLocaleString('ru-RU')} ₽/день`
-			: `${service.fee.toLocaleString('ru-RU')} ₽`
 	// Используем ID услуги для маппинга стилей
 	const styles = getServiceStylesById(service.id)
 
@@ -76,7 +72,6 @@ const ServiceCard = ({ service }: { service: AdditionalService }) => {
 					<p className="text-muted-foreground text-xs mb-3">
 						{service.description || ''}
 					</p>
-					<p className={`text-xl font-bold ${styles.iconColor}`}>{displayPrice}</p>
 				</CardContent>
 			</Card>
 		</motion.div>

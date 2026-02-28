@@ -17,7 +17,7 @@ import { QR_CODE_STORAGE_KEY } from '@/utils/constants'
 
 export default function CartPage() {
 	const router = useRouter()
-	const { cartItems, removeFromCart, clearCart, getCartTotal } = useCart()
+	const { cartItems, removeFromCart, clearCart } = useCart()
 	const { toast } = useToast()
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [whatsappLink, setWhatsappLink] = useState<string | null>(null)
@@ -181,7 +181,6 @@ export default function CartPage() {
 					<div className="lg:col-span-1">
 						<CartSummary
 							cartItems={cartItems}
-							total={getCartTotal()}
 							onClear={clearCart}
 							onProceed={handleCreateBooking}
 							proceedLabel="Оформить через WhatsApp"

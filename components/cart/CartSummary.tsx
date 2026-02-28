@@ -2,13 +2,11 @@
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 import { Info, Trash2, Loader2 } from 'lucide-react'
 import { type CartItem } from '@/context/CartContext'
 
 type CartSummaryProps = {
 	cartItems: CartItem[]
-	total: number
 	onClear: () => void
 	onProceed?: () => void
 	proceedLabel?: string
@@ -18,7 +16,6 @@ type CartSummaryProps = {
 
 export function CartSummary({
 	cartItems,
-	total,
 	onClear,
 	onProceed,
 	proceedLabel = 'Продолжить',
@@ -34,13 +31,6 @@ export function CartSummary({
 				<div className="flex justify-between text-md">
 					<span className="text-muted-foreground">Позиций в корзине:</span>
 					<span className="font-semibold">{cartItems.length}</span>
-				</div>
-				<Separator />
-				<div className="flex justify-between items-center text-xl">
-					<span className="font-medium">Общая стоимость:</span>
-					<span className="font-bold text-primary text-2xl">
-						{total.toLocaleString('ru-RU')} ₽
-					</span>
 				</div>
 				<div className="text-xs text-muted-foreground pt-2 flex items-start">
 					<Info size={16} className="mr-2 mt-0.5 shrink-0 text-primary/80" />
