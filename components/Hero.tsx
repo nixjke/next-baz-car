@@ -37,13 +37,13 @@ const Hero = () => {
 				<img
 					className="w-full h-full object-cover"
 					alt="Премиальные автомобили на фоне гор Дагестана"
-					src="/hero/hero-bg.png"
+					src="/hero/hero-bg.JPEG"
 				/>
 				<div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/50" />
 			</div>
 
 			<motion.div
-				className="container relative z-10 pt-20 md:pt-28 pb-14 md:pb-16"
+				className="container relative z-10 pt-20 md:pt-28 pb-16 md:pb-20 h-full min-h-[78vh] md:min-h-[84vh] flex flex-col justify-between"
 				variants={heroVariants}
 				initial="initial"
 				animate="animate"
@@ -84,7 +84,7 @@ const Hero = () => {
 				<motion.div
 					custom={3}
 					variants={textVariants}
-					className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4"
+					className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4"
 				>
 					{features.map((item) => (
 						<div
