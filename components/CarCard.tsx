@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
 	Car,
 	Star,
@@ -18,24 +17,17 @@ import {
 	Send,
 	Baby,
 	UserCheck,
-	CreditCard,
-	Tag,
 	Gamepad2,
 	ShoppingCart,
 } from 'lucide-react'
 import { USE_CART } from '@/config/featureFlags'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { API_CONFIG } from "@/utils/constants";
 import { generateCarSlug } from "@/utils/carSlug";
+import {
+	getCarTagBadgeStyle,
+	normalizeCarTagColor,
+	type CarTagColorKey,
+} from '@/lib/carTagPalette'
 
 type Car = {
 	id: number
@@ -43,6 +35,9 @@ type Car = {
 	description?: string
 	price: number
 	old_price?: number
+	is_popular?: boolean
+	card_tag?: string
+	card_tag_color?: CarTagColorKey
 	rating?: number
 	fuel_type?: string
 	fuelType?: string
@@ -106,13 +101,35 @@ const getFuelTypeLabel = (fuelType: string | undefined): string => {
 
 const iconsMap = { Baby, UserCheck, Fuel, User: Users, Gamepad2: Gamepad2 }
 
-const CarCardImage = ({ car }: { car: Car }) => (
-  <div className="relative aspect-[16/10] sm:aspect-[4/3] overflow-hidden group">
+const CarCardImage = ({ car }: { car: Car }) => {
+  const resolvedTagColor = normalizeCarTagColor(car.card_tag_color)
+  const resolvedTagStyle = getCarTagBadgeStyle(resolvedTagColor)
+  const topTagText =
+    typeof car.card_tag === 'string' && car.card_tag.trim()
+      ? car.card_tag.trim()
+      : car.is_popular
+        ? 'Популярный'
+        : ''
+  const hasTopTag = Boolean(topTagText)
+
+  return (
+  <div className="relative aspect-[5/4] md:aspect-[4/3] overflow-hidden group bg-gradient-to-b from-slate-900/80 to-slate-800/80">
     <img    
-      className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" 
+      className="w-full h-full object-contain object-center p-1 sm:p-2 transition-transform duration-500 ease-in-out group-hover:scale-[1.03]" 
       alt={`${car?.name || 'Автомобиль'} - автомобиль в аренду`}
      src={getImageUrl(car?.images?.[0])} />
-    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10 opacity-80 group-hover:opacity-60 transition-opacity duration-300"></div>
+    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-black/5 opacity-85 group-hover:opacity-70 transition-opacity duration-300"></div>
+    {hasTopTag && (
+      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20" style={{ marginTop: '-8px', marginLeft: '-12px' }}>
+        <Badge
+          variant="outline"
+          style={resolvedTagStyle}
+          className="shadow-sm text-[14px] font-bold leading-none tracking-[0.002em] px-3 py-[5px] border rounded-[4px] backdrop-blur-lg backdrop-saturate-150 whitespace-nowrap ring-1 ring-white/25 transition-none"
+        >
+          {topTagText}
+        </Badge>
+      </div>
+    )}
     <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 flex space-x-2">
       <Badge 
         variant="outline"
@@ -122,7 +139,8 @@ const CarCardImage = ({ car }: { car: Car }) => (
       </Badge>
     </div>
   </div>
-);
+  )
+}
 
 const CarCardHeaderContent = ({ car }: { car: Car }) => (
   <CardHeader className="p-4 sm:p-5">

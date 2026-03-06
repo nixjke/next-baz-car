@@ -18,6 +18,9 @@ export type Car = {
 		fuelEconomy?: string
 	}
 	available?: boolean
+	is_popular?: boolean
+	card_tag?: string
+	card_tag_color?: 'green' | 'blue' | 'orange' | 'purple' | 'red' | 'teal' | 'yellow'
 	rating?: number
 	fuelType?: string
 	fuel_type?: string

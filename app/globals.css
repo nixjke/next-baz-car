@@ -101,6 +101,7 @@
 html {
 	scrollbar-width: thin;
 	scrollbar-color: hsl(var(--primary) / 0.7) hsl(var(--secondary));
+	scroll-behavior: smooth;
 	overflow-y: scroll; /* Ensures scrollbar space is always reserved to prevent layout shifts */
 }
 
@@ -109,17 +110,6 @@ html {
 }
 
 /* Car card v2 styles are handled by Tailwind classes directly in the component */
-
-.hero-section {
-	background: linear-gradient(
-			135deg,
-			hsl(var(--primary) / 0.9) 0%,
-			hsl(var(--primary) / 0.7) 100%
-		),
-		url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGNhcnN8ZW58MHx8MHx8fDA%3D&w=1000&q=80')
-			no-repeat center center;
-	background-size: cover;
-}
 
 .feature-icon {
 	background: linear-gradient(

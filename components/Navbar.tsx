@@ -12,7 +12,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from '@/components/ui/sheet'
-import { Menu, X, MapPinned, Sun, Moon, ShoppingCart } from 'lucide-react'
+import { Menu, Phone, Sun, Moon, ShoppingCart } from 'lucide-react'
 import { useTheme } from '@/context/ThemeProvider'
 import { useCart } from '@/context/CartContext'
 import { USE_CART } from '@/config/featureFlags'
@@ -177,12 +177,16 @@ const Navbar = () => {
             </AnimatePresence>
           </Button>
 
-		<div className="hidden lg:block">
+		<div className="hidden lg:flex items-center gap-4">
+			<a
+				href="tel:+79894413888"
+				className="inline-flex items-center gap-2 text-sm font-semibold text-foreground/90 hover:text-primary transition-colors"
+			>
+				<Phone className="h-4 w-4 text-primary" />
+				+7 989 441-38-88
+			</a>
 			<Button asChild variant="default" className="group">
-				<Link href="/cars">
-					Забронировать{' '}
-					<MapPinned className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-				</Link>
+				<Link href="/cars">Выбрать автомобиль</Link>
 			</Button>
 		</div>
 
@@ -231,8 +235,7 @@ const Navbar = () => {
 			)}
 			<Button asChild size="lg" className="w-full mt-4 group">
 				<Link href="/cars" onClick={() => setIsSheetOpen(false)}>
-					Забронировать{' '}
-					<MapPinned className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+					Выбрать автомобиль
 				</Link>
 			</Button>
 		</div>

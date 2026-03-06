@@ -3,83 +3,101 @@
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { Sparkles } from 'lucide-react'
+import { Headphones, MapPin, Route, ShieldCheck } from 'lucide-react'
 
 const Hero = () => {
-  const heroVariants = {
-    initial: { opacity: 0, y: 30 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" as const } },
-  };
+	const heroVariants = {
+		initial: { opacity: 0, y: 20 },
+		animate: {
+			opacity: 1,
+			y: 0,
+			transition: { duration: 0.7, ease: 'easeOut' as const },
+		},
+	}
 
-  const textVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: i * 0.2, duration: 0.6, ease: "easeOut" as const },
-    }),
-  };
+	const textVariants = {
+		initial: { opacity: 0, y: 14 },
+		animate: (i: number) => ({
+			opacity: 1,
+			y: 0,
+			transition: { delay: i * 0.12, duration: 0.5, ease: 'easeOut' as const },
+		}),
+	}
 
-  const buttonVariants = {
-    hover: { scale: 1.05, boxShadow: "0px 8px 15px hsla(var(--primary), 0.3)" },
-    tap: { scale: 0.95 },
-  };
+	const features = [
+		{ icon: MapPin, text: 'Доставка в аэропорт и отель' },
+		{ icon: ShieldCheck, text: 'Все авто застрахованы' },
+		{ icon: Headphones, text: 'Поддержка 24/7' },
+		{ icon: Route, text: 'Поможем с маршрутами по Дагестану' },
+	]
 
-  return (
-    <section className="relative overflow-hidden hero-section">
-      <div className="absolute inset-0 z-0">
-        <img  
-          className="w-full h-full object-cover opacity-30" 
-          alt="Абстрактный зелено-белый фон автомобиля" src="https://images.unsplash.com/photo-1621317629367-61584ff0b0bf" />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/60 via-background/30 to-primary/60" />
-      </div>
-      
-      <motion.div 
-        className="container relative z-10 py-24 md:py-40 text-center"
-        variants={heroVariants}
-        initial="initial"
-        animate="animate"
-      >
-        <motion.div 
-          custom={0}
-          variants={textVariants}
-          className="inline-flex items-center justify-center px-4 py-1 mb-6 text-sm font-medium text-primary-foreground bg-primary/90 rounded-full shadow-lg"
-        >
-          <Sparkles className="w-4 h-4 mr-2 animate-pulse" />
-          Поездка Вашей Мечты Ждет
-        </motion.div>
+	return (
+		<section className="relative overflow-hidden min-h-[78vh] md:min-h-[84vh]">
+			<div className="absolute inset-0 z-0">
+				<img
+					className="w-full h-full object-cover"
+					alt="Премиальные автомобили на фоне гор Дагестана"
+					src="/hero/hero-bg.png"
+				/>
+				<div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/50" />
+			</div>
 
-        <motion.h1 
-          custom={1}
-          variants={textVariants}
-          className="text-4xl md:text-7xl font-extrabold text-foreground mb-6 leading-tight [text-shadow:0_2px_4px_rgba(0,0,0,0.1)]"
-        >
-          Путешествуйте Стильно с <span className="gradient-text drop-shadow-sm">BazCar</span>
-        </motion.h1>
-        
-        <motion.p 
-          custom={2}
-          variants={textVariants}
-          className="text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto mb-10 px-4 sm:px-0 [text-shadow:0_1px_2px_rgba(0,0,0,0.05)]"
-        >
-          Откройте для себя премиальный уровень аренды автомобилей.<br />
-          В нашем автопарке — стильные и современные модели для комфортных поездок.
-        </motion.p>
-        
-        <motion.div 
-          custom={3}
-          variants={textVariants}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
-        >
-          <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
-            <Button size="lg" asChild className="shadow-lg">
-              <Link href="/cars">Посмотреть автопарк</Link>
-            </Button>
-          </motion.div>
-        </motion.div>
-      </motion.div>
-    </section>
-  );
-};
+			<motion.div
+				className="container relative z-10 pt-20 md:pt-28 pb-14 md:pb-16"
+				variants={heroVariants}
+				initial="initial"
+				animate="animate"
+			>
+				<div className="max-w-3xl">
+					<motion.h1
+						custom={0}
+						variants={textVariants}
+						className="text-4xl md:text-6xl font-bold text-white leading-tight"
+					>
+						Аренда премиальных автомобилей в Дагестане от 7 900 ₽ в сутки
+					</motion.h1>
+
+					<motion.p
+						custom={1}
+						variants={textVariants}
+						className="mt-5 text-base md:text-xl text-white/90"
+					>
+						Geely • LiXiang • BMW • Toyota | Доставка авто в аэропорт Махачкалы
+					</motion.p>
+
+					<motion.div
+						custom={2}
+						variants={textVariants}
+						className="mt-8 flex flex-wrap items-center gap-4"
+					>
+						<Button
+							size="lg"
+							asChild
+							className="min-w-[230px] text-base font-semibold shadow-lg"
+						>
+							<Link href="/cars">Выбрать автомобиль</Link>
+						</Button>
+					</motion.div>
+				</div>
+
+				<motion.div
+					custom={3}
+					variants={textVariants}
+					className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4"
+				>
+					{features.map((item) => (
+						<div
+							key={item.text}
+							className="rounded-xl border border-white/20 bg-black/35 backdrop-blur-md p-4 text-white flex items-center gap-3"
+						>
+							<item.icon className="h-6 w-6 text-primary shrink-0" />
+							<p className="text-sm leading-snug">{item.text}</p>
+						</div>
+					))}
+				</motion.div>
+			</motion.div>
+		</section>
+	)
+}
 
 export default Hero;

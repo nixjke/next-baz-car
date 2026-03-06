@@ -59,7 +59,7 @@ const transformCar = (apiCar: any): Car => {
 		specifications = normalizedSpecs
 	}
 	
-	return {
+	const transformedCar: Car = {
 		id: apiCar.id,
 		name: apiCar.name,
 		category: apiCar.category,
@@ -70,6 +70,9 @@ const transformCar = (apiCar: any): Car => {
 		features: apiCar.features,
 		specifications: specifications,
 		available: apiCar.available,
+		is_popular: Boolean(apiCar.is_popular),
+		card_tag: typeof apiCar.card_tag === 'string' ? apiCar.card_tag.trim() : undefined,
+		card_tag_color: apiCar.card_tag_color,
 		rating: apiCar.rating,
 		fuelType: apiCar.fuel_type || apiCar.fuelType, // Поддержка обоих форматов
 		fuel_type: apiCar.fuel_type,
@@ -79,12 +82,20 @@ const transformCar = (apiCar: any): Car => {
 		created_at: apiCar.created_at,
 		updated_at: apiCar.updated_at,
 	}
+
+	return transformedCar
 }
 
 // Получение всех автомобилей
 export const getAllCars = async (): Promise<Car[]> => {
 	try {
-		const response = await axiosInstance.get(API_CONFIG.ENDPOINTS.CARS)
+		const response = await axiosInstance.get(API_CONFIG.ENDPOINTS.CARS, {
+			params: { _t: Date.now() },
+			headers: {
+				'Cache-Control': 'no-cache, no-store, max-age=0',
+				Pragma: 'no-cache',
+			},
+		})
 		const cars = Array.isArray(response.data) ? response.data : []
 		return cars.map(transformCar)
 	} catch (error) {
@@ -114,7 +125,16 @@ export const getCarById = async (id: number): Promise<Car | null> => {
 // Получение популярных автомобилей
 export const getFeaturedCars = async (limit: number = 6): Promise<Car[]> => {
 	try {
-		const response = await axiosInstance.get(`${API_CONFIG.ENDPOINTS.CARS}popular?limit=${limit}`)
+		const response = await axiosInstance.get(`${API_CONFIG.ENDPOINTS.CARS}popular`, {
+			params: {
+				limit,
+				_t: Date.now(),
+			},
+			headers: {
+				'Cache-Control': 'no-cache, no-store, max-age=0',
+				Pragma: 'no-cache',
+			},
+		})
 		const cars = Array.isArray(response.data) ? response.data : []
 		return cars.map(transformCar)
 	} catch (error) {
