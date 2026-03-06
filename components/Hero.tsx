@@ -48,13 +48,14 @@ const Hero = () => {
 				initial="initial"
 				animate="animate"
 			>
-				<div className="max-w-3xl">
+				<div className="max-w-6xl">
 					<motion.h1
 						custom={0}
 						variants={textVariants}
 						className="text-4xl md:text-6xl font-bold text-white leading-tight"
 					>
-						Аренда премиальных автомобилей в Дагестане от 7 900 ₽ в сутки
+						<span>Аренда премиальных автомобилей</span>{' '}
+						<span className="block md:whitespace-nowrap">в Дагестане от 7 900 ₽ в сутки</span>
 					</motion.h1>
 
 					<motion.p

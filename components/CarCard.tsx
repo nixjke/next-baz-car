@@ -101,58 +101,10 @@ const getFuelTypeLabel = (fuelType: string | undefined): string => {
 
 const iconsMap = { Baby, UserCheck, Fuel, User: Users, Gamepad2: Gamepad2 }
 
-const getImageToneBackground = (img: HTMLImageElement): { base: string; accent: string } | null => {
-  try {
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d', { willReadFrequently: true })
-    if (!ctx) return null
-
-    const size = 24
-    canvas.width = size
-    canvas.height = size
-    ctx.drawImage(img, 0, 0, size, size)
-
-    const { data } = ctx.getImageData(0, 0, size, size)
-    let r = 0
-    let g = 0
-    let b = 0
-    let count = 0
-
-    for (let i = 0; i < data.length; i += 16) {
-      const pr = data[i]
-      const pg = data[i + 1]
-      const pb = data[i + 2]
-      const luminance = (pr * 299 + pg * 587 + pb * 114) / 1000
-
-      // Skip extremes to avoid tinting from pure black/white areas.
-      if (luminance < 18 || luminance > 238) continue
-
-      r += pr
-      g += pg
-      b += pb
-      count++
-    }
-
-    if (!count) return null
-
-    const avgR = Math.round(r / count)
-    const avgG = Math.round(g / count)
-    const avgB = Math.round(b / count)
-
-    return {
-      base: `rgba(${avgR}, ${avgG}, ${avgB}, 0.24)`,
-      accent: `rgba(${avgR}, ${avgG}, ${avgB}, 0.14)`,
-    }
-  } catch {
-    return null
-  }
-}
-
 const CarCardImage = ({ car }: { car: Car }) => {
   const resolvedTagColor = normalizeCarTagColor(car.card_tag_color)
   const resolvedTagStyle = getCarTagBadgeStyle(resolvedTagColor)
   const imageSrc = getImageUrl(car?.images?.[0])
-  const [imageToneBackground, setImageToneBackground] = useState<{ base: string; accent: string } | null>(null)
   const topTagText =
     typeof car.card_tag === 'string' && car.card_tag.trim()
       ? car.card_tag.trim()
@@ -161,43 +113,12 @@ const CarCardImage = ({ car }: { car: Car }) => {
         : ''
   const hasTopTag = Boolean(topTagText)
 
-  useEffect(() => {
-    setImageToneBackground(null)
-  }, [imageSrc])
-
-  const containerBackgroundStyle = imageToneBackground
-    ? {
-        backgroundImage: `radial-gradient(circle at 18% 18%, ${imageToneBackground.accent} 0%, transparent 58%), linear-gradient(180deg, ${imageToneBackground.base} 0%, rgba(15,23,42,0.74) 100%)`,
-      }
-    : undefined
-
   return (
   <div
     className="relative aspect-[5/4] md:aspect-[4/3] overflow-hidden group bg-gradient-to-b from-slate-900/80 to-slate-800/80"
-    style={containerBackgroundStyle}
   >
     <img
-      className="absolute inset-0 h-full w-full scale-[1.16] object-cover opacity-45 blur-2xl saturate-125"
-      alt=""
-      aria-hidden="true"
-      src={imageSrc}
-      crossOrigin="anonymous"
-      onLoad={(event) => {
-        const tone = getImageToneBackground(event.currentTarget)
-        setImageToneBackground((prev) => prev ?? tone)
-      }}
-    />
-    {imageToneBackground && (
-      <div
-        className="absolute inset-0 z-[1] pointer-events-none"
-        style={{
-          backgroundImage: `radial-gradient(circle at 28% 24%, ${imageToneBackground.accent} 0%, transparent 60%)`,
-        }}
-      />
-    )}
-    <div className="absolute inset-0 z-[2] bg-gradient-to-b from-slate-950/15 via-slate-900/10 to-slate-950/30" />
-    <img
-      className="relative z-10 w-full h-full object-contain object-center p-1 sm:p-2 transition-transform duration-500 ease-in-out group-hover:scale-[1.03] [mask-image:radial-gradient(ellipse_80%_84%_at_center,rgba(0,0,0,1)_60%,rgba(0,0,0,0.9)_74%,rgba(0,0,0,0.45)_88%,transparent_100%)] [-webkit-mask-image:radial-gradient(ellipse_80%_84%_at_center,rgba(0,0,0,1)_60%,rgba(0,0,0,0.9)_74%,rgba(0,0,0,0.45)_88%,transparent_100%)] [mask-repeat:no-repeat] [-webkit-mask-repeat:no-repeat] [mask-size:100%_100%] [-webkit-mask-size:100%_100%]"
+      className="relative z-10 w-full h-full object-cover object-center transition-transform duration-500 ease-in-out group-hover:scale-[1.03]"
       alt={`${car?.name || 'Автомобиль'} - автомобиль в аренду`}
       src={imageSrc}
     />

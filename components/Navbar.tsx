@@ -79,8 +79,10 @@ const Navbar = () => {
 			initial={{ y: -100 }}
 			animate={{ y: 0 }}
 			transition={{ duration: 0.5, ease: 'easeOut' as const }}
-			className={`sticky top-0 z-50 transition-all duration-300 ease-out ${
-				isScrolled ? 'bg-background/95 shadow-lg backdrop-blur-md border-b border-border/50' : 'bg-transparent'
+			className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ease-out ${
+				isScrolled
+					? 'bg-background/95 shadow-lg backdrop-blur-md border-border/50'
+					: 'bg-transparent border-transparent'
 			}`}
 		>
 			{isScrolled && (
