@@ -11,6 +11,7 @@ import Testimonials from '@/components/Testimonials'
 import DagestanAttractions from '@/components/DagestanAttractions'
 import DressCodeInfo from '@/components/DressCodeInfo'
 import AdditionalServicesSection from '@/components/AdditionalServicesSection'
+import FaqSection from '@/components/FaqSection'
 import { mockVerifyQRCode, type QRVerificationResponse } from '@/utils/mockApi'
 import {
 	Dialog,
@@ -277,6 +278,17 @@ export default function HomePageClient() {
 				className="py-16 md:py-24 bg-background"
 			>
 				<DressCodeInfo />
+			</motion.section>
+
+			<motion.section
+				id="faq"
+				variants={sectionVariants}
+				initial="hidden"
+				whileInView="visible"
+				viewport={{ once: true, amount: 0.1 }}
+				className="bg-slate-950"
+			>
+				<FaqSection />
 			</motion.section>
 
 			<motion.section
