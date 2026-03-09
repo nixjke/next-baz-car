@@ -286,7 +286,7 @@ export default function HomePageClient() {
 				initial="hidden"
 				whileInView="visible"
 				viewport={{ once: true, amount: 0.1 }}
-				className="bg-slate-950"
+				className="bg-background dark:bg-slate-950"
 			>
 				<FaqSection />
 			</motion.section>
