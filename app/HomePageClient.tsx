@@ -231,7 +231,7 @@ export default function HomePageClient() {
 				initial="hidden"
 				whileInView="visible"
 				viewport={{ once: true, amount: 0.1 }}
-				className="py-16 md:py-24 bg-secondary/20"
+				className="bg-secondary/20"
 			>
 				<FeaturedCars />
 			</motion.section>
@@ -242,7 +242,7 @@ export default function HomePageClient() {
 				initial="hidden"
 				whileInView="visible"
 				viewport={{ once: true, amount: 0.2 }}
-				className="py-16 md:py-24 bg-background"
+				className="bg-background"
 			>
 				<Features />
 			</motion.section>
@@ -253,7 +253,7 @@ export default function HomePageClient() {
 				initial="hidden"
 				whileInView="visible"
 				viewport={{ once: true, amount: 0.2 }}
-				className="py-16 md:py-24 bg-background"
+				className="bg-background"
 			>
 				<AdditionalServicesSection />
 			</motion.section>
@@ -264,7 +264,7 @@ export default function HomePageClient() {
 				initial="hidden"
 				whileInView="visible"
 				viewport={{ once: true, amount: 0.1 }}
-				className="py-16 md:py-24 bg-secondary/20"
+				className="bg-secondary/20"
 			>
 				<DagestanAttractions />
 			</motion.section>
@@ -275,7 +275,7 @@ export default function HomePageClient() {
 				initial="hidden"
 				whileInView="visible"
 				viewport={{ once: true, amount: 0.1 }}
-				className="py-16 md:py-24 bg-background"
+				className="bg-background"
 			>
 				<DressCodeInfo />
 			</motion.section>
@@ -297,7 +297,7 @@ export default function HomePageClient() {
 				initial="hidden"
 				whileInView="visible"
 				viewport={{ once: true, amount: 0.1 }}
-				className="py-16 md:py-24 bg-secondary/20"
+				className="bg-secondary/20"
 			>
 				<Testimonials />
 			</motion.section>

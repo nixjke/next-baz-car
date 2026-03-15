@@ -4,7 +4,12 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import {
 	Phone,
+	MessageCircle,
 } from 'lucide-react'
+
+const SOCIAL_LINKS = {
+	whatsapp: 'https://wa.me/79894413888',
+}
 
 const Footer = () => {
 	const footerVariants = {
@@ -77,6 +82,17 @@ const Footer = () => {
               <Phone className="h-4 w-4 text-primary shrink-0" />
               <a href="tel:+79894413888" className="hover:text-primary hover:underline transition-colors duration-200">+7 989 441-38-88</a>
             </div>
+			<div className="mt-4 flex items-center gap-2">
+				<a
+					href={SOCIAL_LINKS.whatsapp}
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="WhatsApp"
+					className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border/60 bg-background text-foreground transition-colors hover:text-primary hover:border-primary/50"
+				>
+					<MessageCircle className="h-4 w-4" />
+				</a>
+			</div>
             </div>
           </motion.div>
         </div>
