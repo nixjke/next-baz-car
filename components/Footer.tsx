@@ -5,9 +5,11 @@ import Link from 'next/link'
 import {
 	Phone,
 	MessageCircle,
+	Send,
 } from 'lucide-react'
 
 const SOCIAL_LINKS = {
+	telegram: process.env.NEXT_PUBLIC_TELEGRAM_URL || 'https://t.me/bazrent',
 	whatsapp: 'https://wa.me/79894413888',
 }
 
@@ -82,15 +84,26 @@ const Footer = () => {
               <Phone className="h-4 w-4 text-primary shrink-0" />
               <a href="tel:+79894413888" className="hover:text-primary hover:underline transition-colors duration-200">+7 989 441-38-88</a>
             </div>
-			<div className="mt-4 flex items-center gap-2">
+			<div className="mt-4 flex items-center gap-3">
+				<a
+					href={SOCIAL_LINKS.telegram}
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="Telegram"
+					className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background px-3 py-1.5 text-foreground transition-colors hover:text-primary hover:border-primary/50"
+				>
+					<Send className="h-4 w-4" />
+					<span className="text-xs font-medium">Telegram</span>
+				</a>
 				<a
 					href={SOCIAL_LINKS.whatsapp}
 					target="_blank"
 					rel="noopener noreferrer"
 					aria-label="WhatsApp"
-					className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border/60 bg-background text-foreground transition-colors hover:text-primary hover:border-primary/50"
+					className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background px-3 py-1.5 text-foreground transition-colors hover:text-primary hover:border-primary/50"
 				>
 					<MessageCircle className="h-4 w-4" />
+					<span className="text-xs font-medium">WhatsApp</span>
 				</a>
 			</div>
             </div>

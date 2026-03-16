@@ -75,7 +75,7 @@ const DressCodeInfo = () => {
 
   return (
     <motion.section
-      className="py-16 md:py-20 bg-background"
+      className="py-10 md:py-20 bg-background"
       variants={sectionVariants}
       initial="hidden"
       whileInView="visible"
@@ -83,14 +83,14 @@ const DressCodeInfo = () => {
     >
       <div className="container">
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-8 md:mb-16"
           variants={{ hidden: { opacity: 0, y:30 }, visible: { opacity:1, y:0, transition: {duration: 0.5}} }}
         >
           <div className="inline-flex items-center text-primary mb-2">
             <Info className="h-6 w-6 mr-2" />
             <span className="text-sm font-semibold uppercase tracking-wider">Ваш гид по стилю</span>
           </div>
-          <h2 className="text-4xl font-bold text-foreground mb-3">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
             Дресс-код в Дагестане
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -127,16 +127,7 @@ const DressCodeInfo = () => {
         </div>
 
         <div className="sm:hidden">
-          <div className="relative mx-auto max-w-[340px]">
-            <button
-              type="button"
-              aria-label="Предыдущая карточка"
-              onClick={mobilePrev}
-              className="absolute left-[-42px] top-1/2 z-10 -translate-y-1/2 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/70 bg-card/80 text-foreground shadow-lg backdrop-blur-sm"
-            >
-              <ChevronLeft className="h-5 w-5 text-primary" />
-            </button>
-
+          <div className="relative mx-auto max-w-[360px]">
             <motion.div
               key={recommendations[mobileIndex].title}
               initial={{ opacity: 0, x: 20 }}
@@ -144,57 +135,66 @@ const DressCodeInfo = () => {
               transition={{ duration: 0.25 }}
               className={`rounded-xl shadow-lg overflow-hidden border ${recommendations[mobileIndex].bgColor} ${recommendations[mobileIndex].borderColor}`}
             >
-              <div className="h-[320px] w-full overflow-hidden">
-                <img
-                  className="h-full w-full object-cover object-top"
-                  alt={recommendations[mobileIndex].title}
-                  src={recommendations[mobileIndex].src}
-                />
-              </div>
-              <div className="p-5">
-                <h3 className={`text-2xl font-semibold ${recommendations[mobileIndex].textColor} mb-3`}>
-                  {recommendations[mobileIndex].title}
-                </h3>
-                <ul className="space-y-2">
-                  {recommendations[mobileIndex].points.map((point, pIndex) => (
-                    <li key={pIndex} className="flex items-start">
-                      <Sparkles className={`h-4 w-4 ${recommendations[mobileIndex].textColor} mr-2 mt-1 flex-shrink-0`} />
-                      <span className="text-[15px] text-gray-700">{point}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-4 flex justify-center gap-2">
-                  {recommendations.map((_, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => setMobileIndex(idx)}
-                      aria-label={`Перейти к карточке ${idx + 1}`}
-                      className={`h-2.5 w-2.5 rounded-full transition-colors ${
-                        idx === mobileIndex ? 'bg-primary' : 'bg-primary/30'
-                      }`}
-                    />
-                  ))}
+              <div className="grid grid-cols-[128px_1fr] min-h-[176px]">
+                <div className="h-full w-full overflow-hidden">
+                  <img
+                    className="h-full w-full object-cover object-top"
+                    alt={recommendations[mobileIndex].title}
+                    src={recommendations[mobileIndex].src}
+                  />
+                </div>
+                <div className="p-3.5">
+                  <h3 className={`text-lg font-semibold leading-tight ${recommendations[mobileIndex].textColor} mb-2`}>
+                    {recommendations[mobileIndex].title}
+                  </h3>
+                  <ul className="space-y-1.5">
+                    {recommendations[mobileIndex].points.map((point, pIndex) => (
+                      <li key={pIndex} className="flex items-start">
+                        <Sparkles className={`h-3.5 w-3.5 ${recommendations[mobileIndex].textColor} mr-1.5 mt-0.5 flex-shrink-0`} />
+                        <span className="text-[13px] leading-snug text-gray-700">{point}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </motion.div>
-
+          </div>
+          <div className="mt-3 flex items-center justify-center gap-2">
+            <button
+              type="button"
+              aria-label="Предыдущая карточка"
+              onClick={mobilePrev}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border/70 bg-card/90 text-foreground shadow-lg backdrop-blur-sm"
+            >
+              <ChevronLeft className="h-4.5 w-4.5 text-primary" />
+            </button>
+            {recommendations.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => setMobileIndex(idx)}
+                aria-label={`Перейти к карточке ${idx + 1}`}
+                className={`h-2.5 w-2.5 rounded-full transition-colors ${
+                  idx === mobileIndex ? 'bg-primary' : 'bg-primary/30'
+                }`}
+              />
+            ))}
             <button
               type="button"
               aria-label="Следующая карточка"
               onClick={mobileNext}
-              className="absolute right-[-42px] top-1/2 z-10 -translate-y-1/2 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/70 bg-card/80 text-foreground shadow-lg backdrop-blur-sm"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border/70 bg-card/90 text-foreground shadow-lg backdrop-blur-sm"
             >
-              <ChevronRight className="h-5 w-5 text-primary" />
+              <ChevronRight className="h-4.5 w-4.5 text-primary" />
             </button>
+            <p className="ml-1 text-xs text-muted-foreground">
+              {mobileIndex + 1} / {recommendations.length}
+            </p>
           </div>
-          <p className="mt-4 text-center text-muted-foreground">
-            {mobileIndex + 1} / {recommendations.length}
-          </p>
         </div>
          <motion.p
             variants={{ hidden: { opacity: 0}, visible: { opacity:1, transition: {delay: recommendations.length * 0.15 + 0.3, duration: 0.5}} }}
-            className="text-center mt-12 text-muted-foreground text-sm max-w-3xl mx-auto"
+            className="text-center mt-8 md:mt-12 text-muted-foreground text-sm max-w-3xl mx-auto"
           >
             Простые правила для приятного путешествия. Наслаждайтесь гостеприимством Дагестана!
         </motion.p>

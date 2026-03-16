@@ -12,7 +12,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from '@/components/ui/sheet'
-import { Menu, Phone, Sun, Moon, ShoppingCart, MessageCircle } from 'lucide-react'
+import { Menu, Phone, Sun, Moon, ShoppingCart } from 'lucide-react'
 import { useTheme } from '@/context/ThemeProvider'
 import { useCart } from '@/context/CartContext'
 import { USE_CART } from '@/config/featureFlags'
@@ -22,10 +22,6 @@ const navItems = [
   { label: 'Автопарк', href: '/cars' },
   { label: 'О Дагестане', href: '/about-dagestan' },
 ];
-
-const SOCIAL_LINKS = {
-	whatsapp: 'https://wa.me/79894413888',
-}
 
 const Navbar = () => {
 	const [isSheetOpen, setIsSheetOpen] = useState(false)
@@ -183,28 +179,19 @@ const Navbar = () => {
             </AnimatePresence>
           </Button>
 
-		<div className="hidden lg:flex items-center gap-4">
-			<div className="flex items-center gap-2">
+		<div className="hidden lg:flex flex-col items-end gap-2">
+			<div className="flex items-center gap-4">
 				<a
-					href={SOCIAL_LINKS.whatsapp}
-					target="_blank"
-					rel="noopener noreferrer"
-					aria-label="WhatsApp"
-					className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border/60 bg-card text-foreground transition-colors hover:text-primary hover:border-primary/50"
+					href="tel:+79894413888"
+					className="inline-flex items-center gap-2 text-sm font-semibold text-foreground/90 hover:text-primary transition-colors"
 				>
-					<MessageCircle className="h-4 w-4" />
+					<Phone className="h-4 w-4 text-primary" />
+					+7 989 441-38-88
 				</a>
+				<Button asChild variant="default" className="group">
+					<Link href="/cars">Выбрать автомобиль</Link>
+				</Button>
 			</div>
-			<a
-				href="tel:+79894413888"
-				className="inline-flex items-center gap-2 text-sm font-semibold text-foreground/90 hover:text-primary transition-colors"
-			>
-				<Phone className="h-4 w-4 text-primary" />
-				+7 989 441-38-88
-			</a>
-			<Button asChild variant="default" className="group">
-				<Link href="/cars">Выбрать автомобиль</Link>
-			</Button>
 		</div>
 
           <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -232,23 +219,12 @@ const Navbar = () => {
 				</Link>
 			))}
 			<div className="pt-3 mt-2 border-t border-border/60">
-				<div className="flex items-center gap-2">
-					<a
-						href={SOCIAL_LINKS.whatsapp}
-						target="_blank"
-						rel="noopener noreferrer"
-						aria-label="WhatsApp"
-						className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/60 bg-card text-foreground transition-colors hover:text-primary hover:border-primary/50"
-					>
-						<MessageCircle className="h-4 w-4" />
-					</a>
-					<a
-						href="tel:+79894413888"
-						className="ml-1 text-sm font-medium text-foreground/90 hover:text-primary transition-colors"
-					>
-						+7 989 441-38-88
-					</a>
-				</div>
+				<a
+					href="tel:+79894413888"
+					className="text-sm font-medium text-foreground/90 hover:text-primary transition-colors"
+				>
+					+7 989 441-38-88
+				</a>
 			</div>
 			{USE_CART && (
 				<Button

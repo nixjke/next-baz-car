@@ -28,7 +28,7 @@ const featuresData = [
     {
         icon: <UserCheck className="h-6 w-6"/>,
         title: "Условие аренды",
-        description: "Возраст от 18 лет, паспорт и водительские права."
+        description: "Паспорт и водительские права."
     }
 ];
 

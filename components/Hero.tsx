@@ -3,7 +3,12 @@
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { Headphones, MapPin, Route, ShieldCheck } from 'lucide-react'
+import { Headphones, MapPin, Route, ShieldCheck, MessageCircle, Send } from 'lucide-react'
+
+const SOCIAL_LINKS = {
+	telegram: process.env.NEXT_PUBLIC_TELEGRAM_URL || 'https://t.me/bazrent',
+	whatsapp: 'https://wa.me/79894413888',
+}
 
 const Hero = () => {
 	const heroVariants = {
@@ -27,7 +32,7 @@ const Hero = () => {
 	const features = [
 		{ icon: MapPin, text: 'Доставка в аэропорт и отель' },
 		{ icon: ShieldCheck, text: 'Все авто застрахованы' },
-		{ icon: Headphones, text: 'Поддержка 24/7' },
+		{ icon: Headphones, text: 'Всегда на связи' },
 		{ icon: Route, text: 'Поможем с маршрутами по Дагестану' },
 	]
 
@@ -69,7 +74,7 @@ const Hero = () => {
 					<motion.div
 						custom={2}
 						variants={textVariants}
-						className="mt-8 flex flex-wrap items-center gap-4"
+						className="mt-8 flex flex-col items-start gap-3"
 					>
 						<Button
 							size="lg"
@@ -78,6 +83,28 @@ const Hero = () => {
 						>
 							<Link href="/cars">Выбрать автомобиль</Link>
 						</Button>
+						<div className="flex flex-wrap items-center gap-2">
+							<a
+								href={SOCIAL_LINKS.telegram}
+								target="_blank"
+								rel="noopener noreferrer"
+								aria-label="Telegram"
+								className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/30 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:border-primary/60 hover:text-primary"
+							>
+								<Send className="h-3.5 w-3.5" />
+								Telegram
+							</a>
+							<a
+								href={SOCIAL_LINKS.whatsapp}
+								target="_blank"
+								rel="noopener noreferrer"
+								aria-label="WhatsApp"
+								className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/30 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:border-primary/60 hover:text-primary"
+							>
+								<MessageCircle className="h-3.5 w-3.5" />
+								WhatsApp
+							</a>
+						</div>
 					</motion.div>
 				</div>
 

@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState, useCallback, useEffect } from 'react'
-import { motion, AnimatePresence, type Variants, type PanInfo } from 'framer-motion'
+import React, { useState, useCallback, useEffect, useMemo } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin, ChevronLeft, ChevronRight, Clock3, Route, CarFront } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { getActiveTravelPlaces } from '@/services/travelPlaceService'
@@ -61,43 +61,10 @@ const fallbackAttractionsData: TravelPlaceCard[] = [
   },
 ]
 
-const cardVariants: Variants = {
-  enter: (direction: number) => ({
-    x: direction > 0 ? '100%' : '-100%',
-    opacity: 0,
-    scale: 0.9,
-    zIndex: 0,
-  }),
-  center: {
-    x: 0,
-    opacity: 1,
-    scale: 1,
-    zIndex: 1,
-    transition: {
-      x: { type: 'spring' as const, stiffness: 200, damping: 25 },
-      opacity: { duration: 0.4, ease: 'easeOut' as const },
-      scale: { duration: 0.4, ease: 'easeOut' as const },
-    },
-  },
-  exit: (direction: number) => ({
-    x: direction < 0 ? '100%' : '-100%',
-    opacity: 0,
-    scale: 0.9,
-    zIndex: 0,
-    transition: {
-      x: { type: 'spring' as const, stiffness: 200, damping: 25 },
-      opacity: { duration: 0.3, ease: 'easeIn' as const },
-      scale: { duration: 0.3, ease: 'easeIn' as const },
-    },
-  }),
-}
-
 const DagestanAttractions = () => {
-  const [[page, direction], setPage] = useState<[number, number]>([0, 0])
+  const [page, setPage] = useState(0)
   const [selectedPlace, setSelectedPlace] = useState<TravelPlaceCard | null>(null)
   const [attractionsData, setAttractionsData] = useState<TravelPlaceCard[]>(fallbackAttractionsData)
-
-  const currentAttraction = attractionsData[page]
 
   useEffect(() => {
     const loadPlaces = async () => {
@@ -130,39 +97,38 @@ const DagestanAttractions = () => {
 
       if (mapped.length > 0) {
         setAttractionsData(mapped)
-        setPage([0, 0])
+        setPage(0)
       }
     }
 
     loadPlaces()
   }, [])
 
-  const paginate = useCallback((newPage: number, newDirection: number) => {
-    setPage([newPage, newDirection])
-  }, [])
+  const totalPlaces = attractionsData.length
 
-  const changePage = (newDirection: number) => {
-    let newPage = page + newDirection;
-    if (newPage < 0) {
-      newPage = attractionsData.length - 1
-    } else if (newPage >= attractionsData.length) {
-      newPage = 0
-    }
-    paginate(newPage, newDirection)
-  }
+  const getWrappedIndex = useCallback(
+    (index: number) => {
+      if (totalPlaces === 0) return 0
+      return ((index % totalPlaces) + totalPlaces) % totalPlaces
+    },
+    [totalPlaces]
+  )
 
-  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    const swipeThreshold = 50
-    const velocityThreshold = 300
+  const currentIndex = getWrappedIndex(page)
+  const currentAttraction = attractionsData[currentIndex]
 
-    if (Math.abs(info.offset.x) > swipeThreshold || Math.abs(info.velocity.x) > velocityThreshold) {
-      if (info.offset.x > 0) {
-        changePage(-1)
-      } else {
-        changePage(1)
-      }
-    }
-  }
+  const sideCards = useMemo(() => {
+    if (totalPlaces <= 1) return []
+    const offsets = totalPlaces > 2 ? [1, 2] : [1]
+    return offsets.map((offset) => attractionsData[getWrappedIndex(currentIndex + offset)])
+  }, [attractionsData, currentIndex, getWrappedIndex, totalPlaces])
+
+  const changePage = useCallback(
+    (step: number) => {
+      setPage((prev) => getWrappedIndex(prev + step))
+    },
+    [getWrappedIndex]
+  )
 
   const sectionVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -178,22 +144,29 @@ const DagestanAttractions = () => {
     visible: {
       opacity: 1,
       scale: 1,
-      transition: { duration: 0.5, ease: "easeOut" as const }
-    }
-  };
+      transition: { duration: 0.5, ease: 'easeOut' as const },
+    },
+  }
+
+  if (!currentAttraction) return null
 
   return (
-    <motion.section 
-      className="py-10 md:py-12 bg-secondary overflow-hidden relative"
+    <motion.section
+      className="py-8 md:py-10 bg-secondary overflow-hidden relative"
       variants={sectionVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.1 }}
-      style={{ "--accent-color": currentAttraction.accentColor } as React.CSSProperties}
+      style={{ '--accent-color': currentAttraction.accentColor } as React.CSSProperties}
     >
-      <div className="absolute inset-0 transition-colors duration-700 ease-in-out" style={{ backgroundColor: "var(--accent-color)", opacity: 0.08 }}></div>
+      <div
+        className="absolute inset-0 transition-colors duration-700 ease-in-out"
+        style={{ backgroundColor: 'var(--accent-color)', opacity: 0.1 }}
+      />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(255,255,255,0.1),transparent_48%),radial-gradient(circle_at_50%_90%,rgba(16,185,129,0.12),transparent_35%)]" />
+
       <div className="container relative z-10">
-        <div className="flex flex-col items-center text-center mb-6 md:mb-8">
+        <div className="mb-6 flex flex-col items-center text-center md:mb-8">
           <motion.div variants={itemVariants} className="flex items-center text-primary mb-2">
             <MapPin className="h-6 w-6 mr-2" />
             <span className="text-sm font-semibold uppercase tracking-wider">Откройте для себя</span>
@@ -206,94 +179,113 @@ const DagestanAttractions = () => {
           </motion.p>
         </div>
 
-        <div className="relative flex flex-col items-center">
-          <div className="relative w-full flex justify-center">
-            <motion.div 
-              className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 z-20 cursor-pointer p-3 bg-card/80 backdrop-blur-sm rounded-full shadow-xl hover:bg-card transition-colors"
-              onClick={() => changePage(-1)}
-            >
-              <ChevronLeft className="h-6 w-6 md:h-8 md:w-8 text-primary" />
-            </motion.div>
+        <div className="relative mx-auto max-w-5xl">
+          <button
+            type="button"
+            onClick={() => changePage(-1)}
+            aria-label="Предыдущая локация"
+            className="hidden xl:inline-flex absolute -left-16 top-1/2 z-20 -translate-y-1/2 h-14 w-14 items-center justify-center rounded-full border border-emerald-300/35 bg-slate-950/70 text-emerald-300 shadow-[0_0_26px_rgba(16,185,129,0.18)] backdrop-blur-md transition-colors hover:bg-slate-900/85"
+          >
+            <ChevronLeft className="h-7 w-7" />
+          </button>
 
-            <div className="w-[calc(100%-2rem)] max-w-[370px] sm:max-w-[410px] md:max-w-[430px] relative overflow-hidden">
-              <AnimatePresence initial={false} custom={direction} mode="wait">
-                <motion.div
-                  key={page}
-                  custom={direction}
-                  variants={cardVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  drag="x"
-                  dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={0.1}
-                  onDragEnd={handleDragEnd}
-                  className="relative bg-card rounded-2xl shadow-2xl overflow-hidden border border-border/60 cursor-grab active:cursor-grabbing"
+          <button
+            type="button"
+            onClick={() => changePage(1)}
+            aria-label="Следующая локация"
+            className="hidden xl:inline-flex absolute -right-16 top-1/2 z-20 -translate-y-1/2 h-14 w-14 items-center justify-center rounded-full border border-emerald-300/35 bg-slate-950/70 text-emerald-300 shadow-[0_0_26px_rgba(16,185,129,0.18)] backdrop-blur-md transition-colors hover:bg-slate-900/85"
+          >
+            <ChevronRight className="h-7 w-7" />
+          </button>
+
+          <div className="rounded-3xl border border-emerald-200/15 bg-slate-950/35 p-2.5 md:p-3 shadow-[0_0_0_1px_rgba(74,222,128,0.08),0_18px_55px_rgba(2,6,23,0.5)] backdrop-blur-[3px]">
+            <div className="grid gap-3 md:grid-cols-[1.8fr_1fr]">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.article
+                  key={currentAttraction.id}
+                  initial={{ opacity: 0, y: 10, scale: 0.985 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.985 }}
+                  transition={{ duration: 0.25, ease: 'easeOut' }}
+                  onClick={() => setSelectedPlace(currentAttraction)}
+                  className="group relative cursor-pointer overflow-hidden rounded-2xl border border-emerald-200/20 bg-slate-950/55 shadow-[0_0_18px_rgba(16,185,129,0.1)]"
                 >
-                  <div className="w-full aspect-[16/10] sm:aspect-[3/2] overflow-hidden">
+                  <div className="aspect-[4/3] w-full overflow-hidden md:aspect-[16/10]">
                     <img
-                      className="w-full h-full object-cover"
+                      className="h-full w-full object-cover"
                       alt={currentAttraction.title}
                       src={currentAttraction.imageUrl}
                       draggable="false"
                     />
                   </div>
-                  <div className="p-4 sm:p-4.5 md:p-5">
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground leading-snug">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-3 md:p-5">
+                    <h3 className="text-[1.7rem] font-bold leading-tight text-white md:text-3xl">
                       {currentAttraction.title}
                     </h3>
-                    <div className="mt-2 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-                      <MapPin className="h-4 w-4 text-primary" />
-                      {currentAttraction.location}
-                    </div>
-                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed line-clamp-2">
+                    <p className="mt-1.5 max-w-xl text-xs leading-snug text-slate-200/95 line-clamp-3 md:mt-2 md:text-lg md:leading-normal">
                       {currentAttraction.descriptionShort}
                     </p>
-                    <div className="mt-2 space-y-1 text-sm text-muted-foreground">
-                      <div className="inline-flex items-center gap-2">
-                        <Clock3 className="h-4 w-4 text-primary" />
-                        Время посещения: {currentAttraction.visitDuration}
-                      </div>
-                    </div>
                     <button
                       type="button"
                       onClick={() => setSelectedPlace(currentAttraction)}
-                      className="mt-3 inline-flex rounded-lg border border-primary/40 bg-primary/10 px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-primary/15"
+                      className="mt-2.5 inline-flex items-center rounded-md border border-emerald-300/45 bg-emerald-500/15 px-3.5 py-1.5 text-sm font-semibold text-emerald-200 shadow-[0_0_18px_rgba(16,185,129,0.18)] transition-colors hover:bg-emerald-400/20 md:mt-4 md:px-4 md:py-2"
                     >
                       Подробнее
                     </button>
-                    <div className="mt-3 text-xs text-primary font-semibold">
-                      {page + 1} / {attractionsData.length}
-                    </div>
                   </div>
-                </motion.div>
+                </motion.article>
               </AnimatePresence>
+
+              <div className="grid gap-3 md:grid-rows-2">
+                {sideCards.map((place) => (
+                  <button
+                    key={place.id}
+                    type="button"
+                    onClick={() => setSelectedPlace(place)}
+                    className="group relative overflow-hidden rounded-2xl border border-emerald-200/20 bg-slate-950/55 text-left shadow-[0_0_16px_rgba(16,185,129,0.08)]"
+                  >
+                    <div className="aspect-[16/9] w-full overflow-hidden">
+                      <img className="h-full w-full object-cover" alt={place.title} src={place.imageUrl} />
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    <div className="absolute inset-x-0 bottom-0 p-3 md:p-4">
+                      <h4 className="text-[1.45rem] font-bold leading-tight text-white md:text-3xl">
+                        {place.title}
+                      </h4>
+                      <p className="mt-1 text-xs leading-snug text-slate-200/90 line-clamp-2 md:text-sm md:leading-normal md:line-clamp-1">
+                        {place.descriptionShort}
+                      </p>
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <motion.div 
-              className="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 z-20 cursor-pointer p-3 bg-card/80 backdrop-blur-sm rounded-full shadow-xl hover:bg-card transition-colors"
-              onClick={() => changePage(1)}
-            >
-              <ChevronRight className="h-6 w-6 md:h-8 md:w-8 text-primary" />
-            </motion.div>
+            <div className="relative mx-auto mt-4 w-fit">
+              <div className="absolute inset-x-[-70px] top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-emerald-300/45 to-transparent blur-[1px]" />
+              <div className="relative rounded-full border border-emerald-300/30 bg-slate-950/90 px-5 py-1 text-lg font-bold tracking-wide text-white shadow-[0_0_24px_rgba(16,185,129,0.18)]">
+                {currentIndex + 1} / {totalPlaces}
+              </div>
+            </div>
           </div>
 
-          <div className="mt-4 flex items-center gap-3 md:hidden">
+          <div className="mt-4 flex items-center justify-center gap-3 xl:hidden">
             <motion.button
               type="button"
-              className="cursor-pointer p-2.5 bg-card/80 backdrop-blur-sm rounded-full shadow-xl hover:bg-card transition-colors"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-emerald-300/30 bg-slate-950/75 text-emerald-300 shadow-[0_0_18px_rgba(16,185,129,0.15)] backdrop-blur-md"
               onClick={() => changePage(-1)}
               aria-label="Предыдущая локация"
             >
-              <ChevronLeft className="h-5 w-5 text-primary" />
+              <ChevronLeft className="h-5 w-5" />
             </motion.button>
             <motion.button
               type="button"
-              className="cursor-pointer p-2.5 bg-card/80 backdrop-blur-sm rounded-full shadow-xl hover:bg-card transition-colors"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-emerald-300/30 bg-slate-950/75 text-emerald-300 shadow-[0_0_18px_rgba(16,185,129,0.15)] backdrop-blur-md"
               onClick={() => changePage(1)}
               aria-label="Следующая локация"
             >
-              <ChevronRight className="h-5 w-5 text-primary" />
+              <ChevronRight className="h-5 w-5" />
             </motion.button>
           </div>
         </div>
