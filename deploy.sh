@@ -11,7 +11,7 @@ set -euo pipefail
 #   DEPLOY_USER=root
 #   DEPLOY_PORT=22
 #   DEPLOY_KEY=~/.ssh/baz_car_deploy_ed25519
-#   REMOTE_DIR=~/baz-car
+#   REMOTE_DIR=~/next-baz-car
 #   PM2_APP_NAME=baz
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -20,7 +20,7 @@ DEPLOY_HOST="${DEPLOY_HOST:-95.163.226.53}"
 DEPLOY_USER="${DEPLOY_USER:-root}"
 DEPLOY_PORT="${DEPLOY_PORT:-22}"
 DEPLOY_KEY="${DEPLOY_KEY:-$HOME/.ssh/baz_car_deploy_ed25519}"
-REMOTE_DIR="${REMOTE_DIR:-~/baz-car}"
+REMOTE_DIR="${REMOTE_DIR:-~/next-baz-car}"
 PM2_APP_NAME="${PM2_APP_NAME:-baz}"
 
 COMMIT_MSG=""

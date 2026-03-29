@@ -106,6 +106,17 @@ const Footer = () => {
 					<span className="text-xs font-medium">WhatsApp</span>
 				</a>
 			</div>
+			<div className="mt-4">
+				<iframe
+					src="https://yandex.ru/sprav/widget/rating-badge/98260211625?type=rating&theme=dark"
+					width="150"
+					height="50"
+					frameBorder="0"
+					title="Рейтинг BazCar в Яндекс"
+					loading="lazy"
+					className="rounded-md"
+				/>
+			</div>
             </div>
           </motion.div>
         </div>

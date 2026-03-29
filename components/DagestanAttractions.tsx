@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin, ChevronLeft, ChevronRight, Clock3, Route, CarFront } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { getActiveTravelPlaces } from '@/services/travelPlaceService'
+import { reachGoalOncePerSession } from '@/lib/metrika'
 
 export type TravelPlaceCard = {
   id: string
@@ -125,10 +126,42 @@ const DagestanAttractions = () => {
 
   const changePage = useCallback(
     (step: number) => {
+      reachGoalOncePerSession(
+        'dagestan_scroll_interaction',
+        {
+          section: 'dagestan_attractions',
+          step,
+          current_index: currentIndex + 1,
+          total_places: totalPlaces,
+        },
+        'metrika_once:dagestan_scroll_interaction'
+      )
       setPage((prev) => getWrappedIndex(prev + step))
     },
-    [getWrappedIndex]
+    [currentIndex, getWrappedIndex, totalPlaces]
   )
+
+  const openPlace = useCallback((place: TravelPlaceCard, source: string) => {
+    const params = {
+      section: 'dagestan_attractions',
+      place_id: place.id,
+      place_title: place.title,
+      source,
+    }
+
+    reachGoalOncePerSession(
+      'dagestan_card_click',
+      params,
+      'metrika_once:dagestan_card_click'
+    )
+    reachGoalOncePerSession(
+      'dagestan_place_popup_open',
+      params,
+      'metrika_once:dagestan_place_popup_open'
+    )
+
+    setSelectedPlace(place)
+  }, [])
 
   const sectionVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -207,7 +240,7 @@ const DagestanAttractions = () => {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -10, scale: 0.985 }}
                   transition={{ duration: 0.25, ease: 'easeOut' }}
-                  onClick={() => setSelectedPlace(currentAttraction)}
+                  onClick={() => openPlace(currentAttraction, 'main_card')}
                   className="group relative cursor-pointer overflow-hidden rounded-2xl border border-emerald-200/20 bg-slate-950/55 shadow-[0_0_18px_rgba(16,185,129,0.1)]"
                 >
                   <div className="aspect-[4/3] w-full overflow-hidden md:aspect-[16/10]">
@@ -228,7 +261,10 @@ const DagestanAttractions = () => {
                     </p>
                     <button
                       type="button"
-                      onClick={() => setSelectedPlace(currentAttraction)}
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        openPlace(currentAttraction, 'main_card_details_button')
+                      }}
                       className="mt-2.5 inline-flex items-center rounded-md border border-emerald-300/45 bg-emerald-500/15 px-3.5 py-1.5 text-sm font-semibold text-emerald-200 shadow-[0_0_18px_rgba(16,185,129,0.18)] transition-colors hover:bg-emerald-400/20 md:mt-4 md:px-4 md:py-2"
                     >
                       Подробнее
@@ -242,7 +278,7 @@ const DagestanAttractions = () => {
                   <button
                     key={place.id}
                     type="button"
-                    onClick={() => setSelectedPlace(place)}
+                    onClick={() => openPlace(place, 'side_card')}
                     className="group relative overflow-hidden rounded-2xl border border-emerald-200/20 bg-slate-950/55 text-left shadow-[0_0_16px_rgba(16,185,129,0.08)]"
                   >
                     <div className="aspect-[16/9] w-full overflow-hidden">

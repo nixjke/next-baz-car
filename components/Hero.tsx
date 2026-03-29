@@ -74,24 +74,24 @@ const Hero = () => {
 					<motion.div
 						custom={2}
 						variants={textVariants}
-						className="mt-8 flex flex-col items-start gap-3"
+						className="mt-8 flex flex-col items-start gap-3.5"
 					>
 						<Button
 							size="lg"
 							asChild
-							className="min-w-[230px] text-base font-semibold shadow-lg"
+							className="min-w-[250px] h-12 px-6 text-[17px] font-semibold shadow-xl"
 						>
 							<Link href="/cars">Выбрать автомобиль</Link>
 						</Button>
-						<div className="flex flex-wrap items-center gap-2">
+						<div className="flex flex-wrap items-center gap-2.5">
 							<a
 								href={SOCIAL_LINKS.telegram}
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label="Telegram"
-								className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/30 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:border-primary/60 hover:text-primary"
+								className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-black/45 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:border-primary/60 hover:text-primary"
 							>
-								<Send className="h-3.5 w-3.5" />
+								<Send className="h-4 w-4" />
 								Telegram
 							</a>
 							<a
@@ -99,9 +99,9 @@ const Hero = () => {
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label="WhatsApp"
-								className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/30 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:border-primary/60 hover:text-primary"
+								className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-black/45 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:border-primary/60 hover:text-primary"
 							>
-								<MessageCircle className="h-3.5 w-3.5" />
+								<MessageCircle className="h-4 w-4" />
 								WhatsApp
 							</a>
 						</div>
