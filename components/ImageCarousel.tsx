@@ -73,14 +73,14 @@ const ImageCarousel = ({ images, carName }: ImageCarouselProps) => {
 
   if (!images || images.length === 0) {
     return (
-      <div className="aspect-[16/9] bg-muted rounded-lg flex items-center justify-center text-muted-foreground">
+      <div className="aspect-[8/7] md:aspect-[32/29] bg-muted rounded-lg flex items-center justify-center text-muted-foreground">
         Нет изображений
       </div>
     );
   }
 
 	return (
-		<div className="relative aspect-[16/9] overflow-hidden rounded-xl shadow-2xl bg-black">
+		<div className="relative aspect-[8/7] md:aspect-[32/29] overflow-hidden rounded-xl shadow-2xl bg-black">
 			<AnimatePresence initial={false} custom={direction}>
 				<motion.div
 					key={page}
@@ -107,7 +107,7 @@ const ImageCarousel = ({ images, carName }: ImageCarouselProps) => {
 					}}
 				>
 					<img
-						className="w-full h-full object-cover"
+						className="w-full h-full object-cover object-center"
 						alt={`${carName} - изображение ${imageIndex + 1}`}
 						src={getImageUrl(images[imageIndex])}
 					/>

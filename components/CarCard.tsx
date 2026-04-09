@@ -114,11 +114,9 @@ const CarCardImage = ({ car }: { car: Car }) => {
   const hasTopTag = Boolean(topTagText)
 
   return (
-  <div
-    className="relative aspect-[5/4] md:aspect-[4/3] overflow-hidden group bg-gradient-to-b from-slate-900/80 to-slate-800/80"
-  >
+  <div className="relative aspect-[8/7] md:aspect-[32/29] overflow-hidden group bg-gradient-to-b from-slate-900/80 to-slate-800/80">
     <img
-      className="relative z-10 w-full h-full object-cover object-center transition-transform duration-500 ease-in-out group-hover:scale-[1.03]"
+      className="relative z-0 w-full h-full object-cover object-center transition-transform duration-500 ease-in-out group-hover:scale-[1.03]"
       alt={`${car?.name || 'Автомобиль'} - автомобиль в аренду`}
       src={imageSrc}
     />
