@@ -1,9 +1,7 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { motion } from 'framer-motion'
-import { format } from 'date-fns'
-import { getUnavailableDates } from '@/services/availabilityService'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -194,15 +192,11 @@ const CarCardFooterActions = ({
 	onQuickBook,
 	onAddToCart,
 	showAddToCart,
-	unavailableDates = [],
-	loadingDates = false,
 }: {
 	car: Car
 	onQuickBook: (e: React.MouseEvent) => void
 	onAddToCart: (e: React.MouseEvent) => void
 	showAddToCart: boolean
-	unavailableDates?: string[]
-	loadingDates?: boolean
 }) => {
   const displayPrice = car?.price || 0;
   const hasOldPrice = Boolean(car?.old_price && car.old_price > 0 && car.old_price !== displayPrice);
@@ -255,19 +249,7 @@ const CarCardFooterActions = ({
 const CarCard = ({ car }: { car: Car }) => {
 	const router = useRouter()
 	const carSlug = generateCarSlug(car)
-	const [unavailableDates, setUnavailableDates] = useState<string[]>([])
-	const [loadingDates, setLoadingDates] = useState(true)
 
-	useEffect(() => {
-		const monthStr = format(new Date(), 'yyyy-MM')
-		getUnavailableDates(car.id, monthStr)
-			.then((dates) => {
-				setUnavailableDates(dates)
-			})
-			.catch(() => setUnavailableDates([]))
-			.finally(() => setLoadingDates(false))
-	}, [car.id])
-  
 	const handleQuickBook = (e: React.MouseEvent) => {
 		e.preventDefault()
 		e.stopPropagation()
@@ -315,8 +297,6 @@ const CarCard = ({ car }: { car: Car }) => {
 					onQuickBook={handleQuickBook} 
 					onAddToCart={handleAddToCart} 
 					showAddToCart={USE_CART}
-					unavailableDates={unavailableDates}
-					loadingDates={loadingDates}
 				/>
 			</Card>
 		</motion.div>

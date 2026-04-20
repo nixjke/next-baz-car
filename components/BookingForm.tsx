@@ -15,7 +15,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from '@/components/ui/popover'
-import { format, addDays } from 'date-fns'
+import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import {
 	CalendarIcon,
@@ -41,7 +41,6 @@ import { deliveryOptionsData } from '@/config/bookingOptions'
 import { type Car } from '@/data/mockCars'
 import { USE_CART } from '@/config/featureFlags'
 import { createCartBooking } from '@/services/cartService'
-import { getUnavailableDates } from '@/services/availabilityService'
 import { reachGoal } from '@/lib/metrika'
 import { QR_CODE_STORAGE_KEY } from '@/utils/constants'
 
@@ -261,7 +260,6 @@ const BookingForm = ({
 	const [additionalServices, setAdditionalServices] = useState<AdditionalService[]>([])
 	const [loadingServices, setLoadingServices] = useState(true)
 	const [isSubmitting, setIsSubmitting] = useState(false)
-	const [unavailableDates, setUnavailableDates] = useState<string[]>([])
 	const [calendarMonth, setCalendarMonth] = useState<Date>(() => new Date())
 
 	// Загружаем дополнительные услуги для машины
@@ -285,11 +283,6 @@ const BookingForm = ({
 
 		fetchServices()
 	}, [car.id, car.additional_services])
-
-	useEffect(() => {
-		const monthStr = format(calendarMonth, 'yyyy-MM')
-		getUnavailableDates(car.id, monthStr, { includeNextMonth: true }).then(setUnavailableDates)
-	}, [car.id, calendarMonth])
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -529,24 +522,6 @@ const BookingForm = ({
                 onSelect={handleDateRangeChange}
                 numberOfMonths={1}
                 locale={ru}
-                disabled={(date) => {
-                  const today = new Date()
-                  today.setHours(0, 0, 0, 0)
-                  const dateStr = format(date, 'yyyy-MM-dd')
-                  if (date < today || unavailableDates.includes(dateStr)) return true
-                  const from = formData.dateRange.from
-                  if (from && !formData.dateRange.to) {
-                    const start = new Date(from)
-                    const end = new Date(date)
-                    start.setHours(0, 0, 0, 0)
-                    end.setHours(0, 0, 0, 0)
-                    const [a, b] = start <= end ? [start, end] : [end, start]
-                    for (let d = new Date(a); d <= b; d = addDays(d, 1)) {
-                      if (unavailableDates.includes(format(d, 'yyyy-MM-dd'))) return true
-                    }
-                  }
-                  return false
-                }}
               />
             </PopoverContent>
           </Popover>
